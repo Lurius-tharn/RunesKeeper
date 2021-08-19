@@ -1,61 +1,64 @@
 module.exports = {
 
+    getAllBooksbysection:(connection,userId, callback) =>{
+        stmt = 'SELECT s.section_name, b.author as auteur, b.thumbnail, b.Isbn  '+
+        'from BOOK b '+
+        'INNER JOIN keeper k On k.book = b.id_book '+
+        'INNER JOIN Section s On s.id_section = k.section '+
+        'WHERE k.user = ? ORDER BY s.section_name';
+        connection.query(stmt,[userId],callback)
+
+        },
     //get all of the books on a section for the user(bibliothèque screen)
-   /**
-    * select b.*  from BOOK b 
-    * inner join keeper k On k.book = b.id_book 
-    * inner join section s On s.id_section = k.section 
-    * where s.section_name = ? and k.user = ?
-    * get by section name and user id
-    */
-   getBooksbySection:(connection, section,userId, callback,q) =>{
-    stmt = 'select b.*  from BOOK b '+
-        'inner join keeper k On k.book = b.id_book '+
-        'inner join section s On s.id_section = k.section ' +
-        'where s.section_name = ? and k.user = ?'+ q;
-    connection.query(stmt,[section,userId],callback)
+   getBooksbySection:(connection, section,userId, callback) =>{
+        stmt = 'select distinct b.thumbnail, b.subtitle, b.author, b.Isbn,b.published_date, b.nb_pages '+
+            'from BOOK b '+
+            'inner join keeper k On k.book = b.id_book  '+
+            'INNER JOIN Section s On s.id_section = k.section '+
+            'where s.section_name = ? and k.user = ? ';
+        connection.query(stmt,[section,userId],callback)
     
     },
-    //get books by author in a library for the user(bibliothèque screen)
-    /**
-    * select b.* from BOOK b 
-    * inner join keeper k On k.book = b.id_book 
-    * where b.author = "Anne Robillard" and k.user = 1
-    */
 
-    getBooksbyauthor:(connection, author,userId, callback,q) =>{
-    stmt = 'select b.* from BOOK b  '+
-        'inner join keeper k On k.book = b.id_book  '+
-        'inner join section s On s.id_section = k.section ' +
-        'where b.author = "Anne Robillard" and k.user = ? '+ q;
-    connection.query(stmt,[author,userId],callback)
+    // get all books order by- authors(Library screen, call before the user go on the screen)
+    getAllBooksbyauthor:(connection,userId, callback) =>{
+        
+        stmt = 'select distinct b.author as auteur, b.thumbnail, b.Isbn from BOOK b '+
+            'inner join keeper k On k.book = b.id_book  '+
+            '  where k.user = ? ORDER BY b.author ';
+        connection.query(stmt,[userId],callback)
+
+        },
+ 
+    //get a book by authors  ( Library screen, call when the user touch a more book from one author)
+    getBooksbyauthor:(connection, author,userId, callback) =>{
+        stmt = 'select distinct b.thumbnail, b.subtitle, b.author, b.Isbn,b.published_date, b.nb_pages '+
+            'from BOOK b '+
+            'inner join keeper k On k.book = b.id_book  '+
+            'where b.author = ? and k.user = ? ';
+        connection.query(stmt,[author,userId],callback)
 
     },
+    //get a book by his isbn ( Library screen, call when the user touch a thumbnail)
+    getBookbyIsbn:(connection, isbn,userId, callback) =>{
+        stmt = 'select distinct b.* from BOOK b  '+
+            'inner join keeper k On k.book = b.id_book  '+
+            'where b.isbn = ? and k.user = ? ';
+        connection.query(stmt,[isbn,userId],callback)
+    
+        },
     //get categories of all books for the user(bibliothèque screen)
-    /**
-    * select c.* from genre c , book b
-    *  inner join keeper k On k.book = b.id_book 
-    * where b.genre = c.id_genre and k.user = 1
-    */
-    getCategories:(connection, userId, callback) =>{
-    stmt = 'select DISTINCT c.* from genre c , book b '+
-        'inner join keeper k On k.book = b.id_book  '+
-        'where b.genre = c.id_genre and k.user = ? ';
-    connection.query(stmt,[userId],callback)
-
-    },
+  
+   
     // get books by categories(List screen)
-    /**
-    * select DISTINCT b.* from book b 
-    * inner join keeper k On k.book = b.id_book 
-    * where b.genre = ? and k.user = ?
-    */
-
-    getBooksbyCategories:(connection, categorieId,userId, callback,q) =>{
-    stmt = 'select DISTINCT b.* from book b  '+
-        'inner join keeper k On k.book = b.id_book '+
-        'where b.genre = ? and k.user = ? ' + q;
-    connection.query(stmt,[categorieId,userId],callback)
+    getAllBooksbyCategories:(connection,userId, callback) =>{
+        
+        stmt = 'SELECT DISTINCT c.name , b.author as auteur, b.thumbnail, b.Isbn '+
+            'FROM genre c , book b '+
+            'inner join keeper k On k.book = b.id_book '+
+            'WHERE b.genre = c.id_genre and k.user = ? '+
+            'ORDER BY c.name, b.subtitle';
+        connection.query(stmt,[userId],callback)
 
     },
 
@@ -68,22 +71,17 @@ module.exports = {
 
 
     //get the sections of one book (from the api or database)(book screen)
-    /**
-    * SELECT s.section_name from section s inner join keeper k on s.id_section = k.section inner join book b on b.id_book = k.book  where b.isbn = "bfrbrrb"
-    */
     getSectionsofBook:(connection, isbn ,userId, callback)=>{
-    stmt = 'SELECT s.section_name from section s '+
-            'inner join keeper k on s.id_section = k.section '+
-            'inner join book b on b.id_book = k.book '+ 
-            'where b.isbn = ? and k.user = ?';
-    connection.query(stmt,[isbn,userId],callback)
+        stmt = 'SELECT s.section_name from section s '+
+                'inner join keeper k on s.id_section = k.section '+
+                'inner join book b on b.id_book = k.book '+ 
+                'where b.isbn = ? and k.user = ?';
+        connection.query(stmt,[isbn,userId],callback)
 
     },
 
     //add one book
-    /**
-    * insert into Book values(??????)
-    */
+   
     newBook: (connection,book, callback) =>{
     stmt = 'INSERT INTO book VALUES(null,?,?,?,?,?,?,?,?,?,?)'
     connection.query(stmt,
