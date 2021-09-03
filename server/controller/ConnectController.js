@@ -16,8 +16,11 @@ module.exports = {
                     })
 
                 }else{
-                    bcrypt.compare(password, rows[0].password, (err,result) =>{
+                    console.log(password, rows[0].password);
+                    bcrypt.compare(password.trim(), rows[0].password, (err,result) =>{
                         if (result == true) {
+                            console.log("lets goo");
+
                             res.json({
                                 "valid" : true,
                                 "message" : "Succès !",
@@ -67,12 +70,18 @@ module.exports = {
                 console.log(err);
             
                 userData.newUser(req.con,pseudo,email,hash,(err,rows) => {
-                    if(err)
-                        throw err;
-                    res.json({
-                        "valid" : true,
-                        "message" : "Succès !"
-                    })    
+                    if(err){
+                        res.json({
+                            "valid" : false,
+                            "message" : "Erreur ! Adresse email ou pseudo déja existant"
+                        })  
+                    }else{
+                        res.json({
+                            "valid" : true,
+                            "message" : "Succès !"
+                        }) 
+                    }
+                     
     
                 })
             })

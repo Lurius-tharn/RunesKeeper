@@ -1,7 +1,7 @@
 module.exports = {
 
     getAllBooksbysection:(connection,userId, callback) =>{
-        stmt = 'SELECT s.section_name, b.author as auteur, b.thumbnail, b.Isbn  '+
+        stmt = 'SELECT b.*, s.section_name  '+
         'from BOOK b '+
         'INNER JOIN keeper k On k.book = b.id_book '+
         'INNER JOIN Section s On s.id_section = k.section '+

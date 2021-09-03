@@ -7,7 +7,20 @@ module.exports = {
         const {userId} = req.params;
         bookData.getAllBooksbysection(req.con,userId, 
             (err,bookRows) =>{
-                res.send(bookRows);
+                    const result = bookRows.reduce(function(sections, item) {
+                        let section = sections.find(section => section.sectionName === item.section_name);
+                        if(!section) {
+                          section = { sectionName : item.section_name, data : [] };
+                          sections.push(section);
+                        } 
+                        section.data.push(item);
+                        return sections;
+                        
+                      }, []);
+                      
+                      console.log(result);    
+               
+                res.send(result);
         });          
     }, 
     booksbySection:(req,res) =>{
@@ -23,7 +36,17 @@ module.exports = {
         const {userId} = req.params;
         bookData.getAllBooksbyauthor(req.con,userId, 
             (err,bookRows) =>{
-                res.send(bookRows);
+                const result = bookRows.reduce(function(authors, item) {
+                    let author = authors.find(author => author.Auteur === item.auteur);
+                    if(!author) {
+                        author = { Auteur : item.auteur, data : [] };
+                      authors.push(author);
+                    } 
+                    author.data.push(item);
+                    return authors;
+                    
+                  }, []);
+                res.send(result);
         });          
     }, 
     Booksbyauthor:(req,res) =>{
