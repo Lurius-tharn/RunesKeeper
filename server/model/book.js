@@ -1,11 +1,12 @@
 module.exports = {
 
     getAllBooksbysection:(connection,userId, callback) =>{
-        stmt = 'SELECT b.*, s.section_name  '+
-        'from BOOK b '+
-        'INNER JOIN keeper k On k.book = b.id_book '+
-        'INNER JOIN Section s On s.id_section = k.section '+
-        'WHERE k.user = ? ORDER BY s.section_name';
+        stmt = 'SELECT b.*, s.section_name , g.name as genreName ' +
+            'from BOOK b ' +
+            'INNER JOIN keeper k On k.book = b.id_book ' +
+            'INNER JOIN Section s On s.id_section = k.section ' +
+            'INNER JOIN Genre g On g.id_genre = b.genre '+
+            'WHERE k.user = ? And b.genre = g.id_genre ORDER BY s.section_name';
         connection.query(stmt,[userId],callback)
 
         },
