@@ -18,4 +18,7 @@ router.get("/bookbyIsbn/:userId/:isbn", libraryController.BookbyIsbn);
 router.get("/sectionsofBook/:userId/:isbn", libraryController.SectionsofBook);
 
 router.post("/newKeeper", userController.newKeeper)
+/*router.post("/newBook", userController.newBook)
+router.post("/newBook", userController.newBook)*/
+
 module.exports = router
