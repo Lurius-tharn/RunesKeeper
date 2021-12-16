@@ -39,7 +39,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'Fitz','davenese@gmail.com','hgcjkdbvkhddc'),(2,'vvv','Vvvv','$2b$10$m.iDVTfJQfS1Hrd9LhzKnOeibRj1rwvrrNpmPS'),(6,'Fitzounet','davenesesjs@gmail.com','$2b$10$308nM39PPyyrp5OPxxIU8.rom43Ypd37aqwYmU'),(8,'Lurius','1234','$2b$10$nwa1HAuKR4xjehiyyoX.Au6Vw1AIuMjxCJgBkg'),(9,'Caca','Tamere','$2b$10$RC4K.953QBwE02GRXfkLOecjAoIF6/LJb4huJg4ayM564VS/nCuR2');
+INSERT INTO `user` VALUES (1,'Fitz','davenese@gmail.com','hgcjkdbvkhddc'),(2,'vvv','Vvvv','$2b$10$m.iDVTfJQfS1Hrd9LhzKnOeibRj1rwvrrNpmPS'),(6,'Fitzounet','davenesesjs@gmail.com','$2b$10$308nM39PPyyrp5OPxxIU8.rom43Ypd37aqwYmU'),(8,'Lurius','1234','$2b$10$nwa1HAuKR4xjehiyyoX.Au6Vw1AIuMjxCJgBkg');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
