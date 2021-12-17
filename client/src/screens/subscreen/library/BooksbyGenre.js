@@ -48,7 +48,7 @@ export const BooksbyGenreScreen = (props) => {
                                         ><Text style={LibStyle.thumbnailCount} >+10</Text></ImageBackground>
                 </View>
             <TouchableOpacity style= {LibStyle.selectButton}>
-                <Text style={LibStyle.textButton}> Voir la sélection</Text>
+                <Text style={LibStyle.textButton}> Voir la sélection de cette section</Text>
             </TouchableOpacity>
 
             </View>

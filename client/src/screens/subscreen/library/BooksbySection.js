@@ -1,42 +1,38 @@
-import React,{useState, useEffect} from "react"
-import { View , Text ,SectionList, Image,FlatList ,TouchableOpacity,ImageBackground} from "react-native"
+import React, {useEffect, useState} from "react"
+import {FlatList, Image, ImageBackground, Text, TouchableOpacity, View} from "react-native"
 import LibStyle from "../../../styles/main/LibraryStyles";
-import  ListScreen  from "../List";
-import { createStackNavigator } from '@react-navigation/stack'
-import { NavigationContainer } from '@react-navigation/native'
-import * as Colors from  "../../../styles/colors";
-const ip_adress  = '192.168.1.25'
+import {createStackNavigator} from '@react-navigation/stack'
+import {IP_ADRESS} from "../../../config";
 
 const Stack = createStackNavigator()
 export const BooksbySectionScreen = ({navigation}) => {
 
-    const [dataSource, setDataSource] =  useState([])
-    const fetchData=()=>{
-        
-         fetch('http://172.20.41.106:4547/RunesKeeper/allBooksbysection/1')
+    const [dataSource, setDataSource] = useState([])
+    const fetchData = () => {
+
+        fetch("http://" + IP_ADRESS + ":4547/Runeskeeper/allBooksbysection/1")
             .then((response) => response.json())
             .then((responseJson) => {
                 setDataSource(responseJson)
             })
-            .catch((error) =>{
+            .catch((error) => {
                 console.error(error);
             });
-
     }
     useEffect(() => {
-       const timer = setTimeout(() => {
+        const timer = setTimeout(() => {
             fetchData();
-          }, 1000);
-          return () => clearTimeout(timer);
-        });
-    
+        }, 3000);
+        return () => clearTimeout(timer);
+    }, []);
+
     return (
         //Components
-        <View style = {LibStyle.container}>
-            <FlatList 
+        <View style={LibStyle.container}>
+            <FlatList
                 data={dataSource}
-                keyExtractor={(item,index) => index.toString()}  
-                renderItem={({ item }) => {
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({item}) => {
                     let color;
                     switch (item.sectionName) {
                         case "Coup de cœur":
@@ -54,85 +50,92 @@ export const BooksbySectionScreen = ({navigation}) => {
                         default:
                             break;
                     }
-                    return  <View style= {LibStyle.blocContainer}>
-                                <View 
-                                    style={
-                                        { ...LibStyle.containerTitle, backgroundColor:color}
-                                    }>
-                                    <Text style={LibStyle.titleTxt}> {item.sectionName}</Text>          
-                                </View> 
-                                <FlatList data={item.data}
-                                    contentContainerStyle={LibStyle.booksContainer}
-                                      horizontal={true}
-                                      keyExtractor={(item,index) => index.toString()}  
-                                      renderItem={({ item: data, index }) =>{
-                                        let isFull = false;
-                                        if (!isFull) {
-                                            if(index >= 3){
-                                                isFull = true;
-                                                return (
-                                                <ImageBackground    
-                                                    style = {{
-                                                        ...LibStyle.thumbnail,   
-                                                        display:"flex",
-                                                        alignItems:"center",
-                                                        justifyContent:"center"
-                                                    }}   
-                                                    imageStyle= 
-                                                        {{opacity:0.5}}
-                                                    resizeMode="cover"
-                                                    source={{
-                                                    uri: data.thumbnail,
-                                                }}          
-                                                ><Text style={LibStyle.thumbnailCount} >+10</Text>
-                                                </ImageBackground>
-                                                )
-    
-                                            }else{
-                                                return(
-                                                    <TouchableOpacity >
-                                                        <Image    
-                                                            style = {LibStyle.thumbnail} 
-                                                            source={{
-                                                                uri: data.thumbnail,
-                                                            }}          
-                                                        >
-                                                        </Image>
-                                                    </TouchableOpacity>
-                                                )   
-                                            }
-                                        }
-    
+                    return <View style={LibStyle.blocContainer}>
+                        <View
+                            style={
+                                {...LibStyle.containerTitle, backgroundColor: color}
+                            }>
+                            <Text style={LibStyle.titleTxt}> {item.sectionName}</Text>
+                        </View>
+                        <FlatList data={item.data}
+                                  contentContainerStyle={LibStyle.booksContainer}
+                                  horizontal={true}
+                                  keyExtractor={(item, index) => index.toString()}
+                                  renderItem={({item: data, index}) => {
+                                      let isFull = false;
+                                      if (!isFull) {
+                                          if (index >= 4) {
+                                              isFull = true;
+                                              return (
+                                                  <ImageBackground
+                                                      style={{
+                                                          ...LibStyle.thumbnail,
+                                                          display: "flex",
+                                                          alignItems: "center",
+                                                          justifyContent: "center"
+                                                      }}
+                                                      imageStyle=
+                                                          {{opacity: 0.5}}
+                                                      resizeMode="cover"
+                                                      source={{
+                                                          uri: data.thumbnail,
+                                                      }}
+                                                  ><Text
+                                                      style={LibStyle.thumbnailCount}>+{Object.keys(item.data).length - 3}</Text>
+                                                  </ImageBackground>
+                                              )
+
+                                          } else {
+                                              return (
+                                                  <TouchableOpacity
+                                                      onPress={() => {
+                                                          navigation.navigate("Book", {
+                                                              name: data.title,
+                                                              dataBook: data
+
+                                                          })
+                                                      }}
+                                                  >
+                                                      <Image
+                                                          style={LibStyle.thumbnail}
+                                                          source={{
+                                                              uri: data.thumbnail,
+                                                          }}
+                                                      >
+                                                      </Image>
+                                                  </TouchableOpacity>
+                                              )
+                                          }
                                       }
-                                        
-                                      
-                                       
-                                }
-                                />
-                                    <TouchableOpacity 
-                                        style= {LibStyle.selectButton}
-                                        onPress={() =>{
-                                              navigation.navigate("List" ,{
-                                                    dataBooks: item.data,
-                                                    name:item.sectionName,
-                                                    nbBooks:Object.keys( item.data ).length
-                                              })
-                                        }}
-                                        >
-                                        <Text style={LibStyle.textButton}> Voir la sélection</Text>
-                                    </TouchableOpacity>
 
-                            </View>
-                              }
-                             
-                             
-                          }
-                          
-                        
-                />
+                                  }
 
-           
-           
+
+                                  }
+                        />
+                        <TouchableOpacity
+                            style={LibStyle.selectButton}
+                            onPress={() => {
+                                navigation.navigate("List", {
+                                    dataBooks: item.data,
+                                    name: item.sectionName,
+                                    nbBooks: Object.keys(item.data).length
+                                })
+                            }}
+                        >
+                            <Text style={LibStyle.textButton}> Voir la sélection</Text>
+                        </TouchableOpacity>
+
+                    </View>
+                }
+
+
+                }
+
+
+            />
+
+
             {/* <SectionList 
             
                 style= {LibStyle.blocContainer}
