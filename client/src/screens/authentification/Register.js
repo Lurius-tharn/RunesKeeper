@@ -3,9 +3,8 @@ import { CheckBox, Text, TextInput, View,TouchableOpacity, Alert,Linking  } from
 import AuthStyle from '../../styles/authentification/AuthStyles';
 import { Login } from './Login';
 
-const ip_address = '192.168.1.25'
-
-export const Register = ({props }) => {
+import { IP_ADRESS } from '../../config';
+export const Register = ({props,navigation }) => {
   
   const [email, setEmail] =  useState('')
 
@@ -59,7 +58,7 @@ export const Register = ({props }) => {
                       }else if (!verifiedPassword) {
                       Alert.alert('ERREUR', "vous devez vérifier votre mot de passe !")
                       } else {
-                        signIn(data, props.navigator)
+                        signIn(data, navigation.navigator)
                       }
                   }}>
                   <Text style={AuthStyle.loginButtonText}>S'inscrire</Text>
@@ -70,7 +69,7 @@ export const Register = ({props }) => {
     )
 }
 const signIn = async (data, navigation) => {
-  fetch("http://" + ip_address + ":4547/Runeskeeper/signup", {
+  fetch("http://" + IP_ADRESS + ":4547/Runeskeeper/signup", {
       method:"POST",
       headers: {
           'Content-Type': 'application/json'

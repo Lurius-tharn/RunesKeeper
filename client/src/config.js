@@ -1,0 +1,1 @@
+export const IP_ADRESS = '172.16.97.161'

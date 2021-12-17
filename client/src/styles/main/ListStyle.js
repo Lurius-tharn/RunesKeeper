@@ -16,16 +16,21 @@ const ListStyle = StyleSheet.create({
     bookNumberContainer:{
         backgroundColor: Colors.DarkBlue,
         borderRadius:16,
-        width:60+"%",
+        width:196,
         height:56,
         display:"flex",
         alignItems:"center",
-        justifyContent:"center"
+        justifyContent:"center",
+        textAlign:"center",
     },
     numberText:{
         fontFamily:"Montserrat",
         fontSize:25,
-        color:Colors.WhiteColor
+        color:Colors.WhiteColor,
+        flexWrap:"nowrap",
+        
+        textAlign:"center"
+
     },
 
     listContainer:{
