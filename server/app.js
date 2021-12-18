@@ -10,8 +10,8 @@ app.use(bodyParser.urlencoded({extended:true}));
 var connection = mysql.createConnection({
     host:'localhost',
     port:'3306',
-    user:'root',
-    password:'',
+    user:'RunesKeeper',
+    password:'runeskeeper',
     database:'runeskeeper'
 });
 app.use((req,res,next) => {
@@ -26,7 +26,7 @@ var server = app.listen(4547, () =>{
 
 connection.connect((error) =>{
     if(error) console.log(error);
-    else console.log("connected");
+    else console.log("Serveur lancé sur le port " + server.address().port);
 
 });
 
