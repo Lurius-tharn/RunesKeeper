@@ -6,15 +6,26 @@ import {ListScreen} from './screens/subscreen/List';
 import {PrimaryColor, PrimaryTextColor} from './styles/colors';
 import {BookScreen} from './screens/subscreen/Book';
 import Authentification from "./screens/authentification/Authentification";
+import RunesKeeperRedirect from "./screens/RkRedirect";
+import User from "./screens/user/User";
 const Stack = createStackNavigator()
 const Index = () => {
     return (
 
         <NavigationContainer>
             <Stack.Navigator screenOptions={{headerShown: false}}>
+                {/*Troisième écran qui s'affiche en p^remier, chargé de l'aggichage de RK. Si il detecte un utilisateur il navige dans le main*/}
+                <Stack.Screen
+                    name = "RunesKeeperRedirect"
+                    component = {RunesKeeperRedirect}
+                />
                 <Stack.Screen
                     name = "Authentication"
                     component = {Authentification}
+                />
+                <Stack.Screen
+                    name = "User"
+                    component = {User}
                 />
                 <Stack.Screen
                     name="Main"

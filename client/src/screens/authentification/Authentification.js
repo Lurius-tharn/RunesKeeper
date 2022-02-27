@@ -10,6 +10,7 @@ import AuthStyle from '../../styles/authentification/AuthStyles';
 import RunesKeeper from '../../assets/svg/RunesKeeper';
 
 import {PrimaryColor} from '../../styles/colors';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Stack = createStackNavigator()
 
@@ -19,7 +20,9 @@ const Authentification = ({navigation}) => {
         <View style={AuthStyle.mainView}>
             <View style={AuthStyle.view}>
                 <RunesKeeper/>
-                <Text style={AuthStyle.title}>RunesKeeper</Text>
+            </View>
+            <View >
+
             </View>
             <Stack.Navigator screenOptions={
                 {
