@@ -1,24 +1,18 @@
 import { StyleSheet } from "react-native";
 import * as Colors from "../colors";
-
+import RunesKeeperStyles from "../RunesKeeperStyles";
 const AuthStyle =  StyleSheet.create({
 
     mainView:{
-        
         flexGrow: 1,
         flex:1,
         backgroundColor:Colors.PrimaryColor,
 
     },
     view: {
-       display:"flex",
-        
-     
-        justifyContent:"center",
-        alignItems:"center",
-        backgroundColor:Colors.PrimaryColor,
-        height:"45%"
-        
+        ...RunesKeeperStyles.RksView,
+        height:"45%",
+
     },
     title: {
        

@@ -64,12 +64,6 @@ export const Login = ({navigation}) => {
 }
 
 const logIn = async (data, navigation, isLogged) => {
-    try {
-        const jsonValue = await AsyncStorage.getItem('@ma_clé')
-        console.log(jsonValue != null ? JSON.parse(jsonValue) : null)
-    } catch(e) {
-        // lance une erreur
-    }
     fetch("http://" + IP_ADRESS + ":4547/Runeskeeper/signin", {
         method: "POST",
         headers: {
@@ -86,7 +80,6 @@ const logIn = async (data, navigation, isLogged) => {
             if (!responseJSON.valid) {
                 Alert.alert("ERREUR", responseJSON.message)
             } else {
-              console.log("ERREUR", isLogged)
 
                 if (isLogged){
                     try {

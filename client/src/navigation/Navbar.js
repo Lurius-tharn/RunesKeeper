@@ -3,12 +3,60 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {HomeScreen, LibraryScreen, SearchScreen} from '../screens/main/index'
 import { View , Text , Image,ImageBackground ,TouchableOpacity} from "react-native"
 import * as Colors from "../styles/colors";
+import ListStyle from "../styles/main/ListStyle";
+import { getHeaderTitle } from '@react-navigation/elements';
+import header from "react-native/Libraries/NewAppScreen/components/Header";
 
 const Tab = createBottomTabNavigator();
 const Iconpath = '../assets/icons/'
 
 const Navbar = ({route, navigation}) => {
-    //let pseudo = route.params.pseudo;
+    let pseudo = route.params.pseudo;
+    const  LogoTitle = (title, options,titleStyle) => {
+        return (
+            <View style={options}>
+                <Text style={titleStyle}>{title}</Text>
+
+                <TouchableOpacity
+                    style={{
+                        ...titleStyle,
+                        marginRight:10,
+                        flex: 0.3,
+                        backgroundColor: "beige",
+                        borderWidth: 1,
+                        borderBottomLeftRadius: 20,
+                        borderBottomRightRadius: 20,
+                        display:'flex',
+                        justifyContent:'center',
+                        flexDirection:'column'
+                    }}
+                    onPress={() => {
+                      navigation.navigate('User', {'pseudo':pseudo})
+                    }}>
+                    <View style={{
+                        height:15,
+                        marginBottom:30,
+                        backgroundColor: "red",
+
+
+                    }}>
+                        <Text style={{
+                            fontFamily: "Montserrat",
+                            fontSize: 32,
+                            color: Colors.PrimaryTextColor,
+                            marginTop:7,
+                            marginLeft: 10
+
+                        }}>{pseudo.substr(0,1)}</Text>
+
+                    </View>
+                </TouchableOpacity>
+
+
+            </View>
+
+        );
+    }
     return (
         <Tab.Navigator
             screenOptions={
@@ -43,15 +91,27 @@ const Navbar = ({route, navigation}) => {
 
         >
             <Tab.Group screenOptions={{
+
                 headerStyle: {
                     backgroundColor: Colors.PrimaryColor,
+                    height: 80,
+                    display:'flex',
+                    flexDirection:'row',
+                    justifyContent:"space-between",
+
 
                 },
-
+                header: ({ navigation, route, options }) => {
+                    const title = getHeaderTitle(options, route.name);
+                    return LogoTitle(title,options.headerStyle, options.headerTitleStyle) ;
+                },
                 headerTitleStyle: {
                     fontFamily: "Montserrat",
                     fontSize: 32,
-                    color: Colors.PrimaryTextColor
+                    color: Colors.PrimaryTextColor,
+                    marginTop:35,
+                    marginLeft: 15
+
                 },
             }}>
 

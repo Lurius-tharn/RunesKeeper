@@ -85,7 +85,7 @@ const signIn = async (data, navigation) => {
         if(!responseJSON.valid) {
             Alert.alert("ERREUR", responseJSON.message)
         } else {
-          navigation.navigate('Login', Login)
+          navigation.navigate('RunesKeeperRedirect')
         }
       }).catch (error => console.log(error))
 }
