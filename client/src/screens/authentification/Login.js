@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {Alert, CheckBox, Text, TextInput, TouchableOpacity, View} from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import AuthStyle from '../../styles/authentification/AuthStyles';
 import {IP_ADRESS} from '../../config';
 
@@ -8,8 +9,6 @@ export const Login = ({navigation}) => {
     const [password, setPassword] = useState('')
     const [isSelected, setSelection] = useState(false);
     let data = {"pseudo": pseudo, "pwd": password}
-
-
     return (
 
         <View style={AuthStyle.formView}>
@@ -53,7 +52,7 @@ export const Login = ({navigation}) => {
                 } else if (!password) {
                     Alert.alert('ERREUR', "vous devez saisir votre mot de passe !")
                 } else {
-                    logIn(data, navigation)
+                    logIn(data, navigation,isSelected)
                 }
             }}>
                 <Text style={AuthStyle.loginButtonText}>Se connecter</Text>
@@ -64,7 +63,13 @@ export const Login = ({navigation}) => {
     )
 }
 
-const logIn = async (data, navigation) => {
+const logIn = async (data, navigation, isLogged) => {
+    try {
+        const jsonValue = await AsyncStorage.getItem('@ma_clé')
+        console.log(jsonValue != null ? JSON.parse(jsonValue) : null)
+    } catch(e) {
+        // lance une erreur
+    }
     fetch("http://" + IP_ADRESS + ":4547/Runeskeeper/signin", {
         method: "POST",
         headers: {
@@ -81,6 +86,16 @@ const logIn = async (data, navigation) => {
             if (!responseJSON.valid) {
                 Alert.alert("ERREUR", responseJSON.message)
             } else {
+              console.log("ERREUR", isLogged)
+
+                if (isLogged){
+                    try {
+                        const jsonValue = JSON.stringify(responseJSON)
+                         AsyncStorage.setItem('@ma_clé', jsonValue)
+                    } catch (e) {
+                        Alert.alert("ERREUR", 'impossible de rester connecter')
+                    }
+                }
                 navigation.navigate('Main', {"pseudo": responseJSON.pseudo})
             }
         }).catch(error => console.log(error))

@@ -20,6 +20,10 @@ const Authentification = ({navigation}) => {
             <View style={AuthStyle.view}>
                 <RunesKeeper/>
                 <Text style={AuthStyle.title}>RunesKeeper</Text>
+                <Text style={AuthStyle.subtitle}>Garderz</Text>
+            </View>
+            <View >
+
             </View>
             <Stack.Navigator screenOptions={
                 {
