@@ -7,6 +7,8 @@ import RunesKeeper from "../assets/svg/RunesKeeper";
 import RunesKeeperStyles from "../styles/RunesKeeperStyles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useIsFocused} from "@react-navigation/native";
+import {IhaveColor, PrimaryColor, PrimaryTextColor} from "../styles/colors";
+import Rune from "../react-native/StrokeAnimation";
 
 const RunesKeeperRedirect = ({navigation})=> {
     const isFocused = useIsFocused();
@@ -26,7 +28,7 @@ const RunesKeeperRedirect = ({navigation})=> {
     useEffect(() => {
         if(isFocused){
             const timer = setTimeout(() => {
-                setNavigation();
+                // setNavigation();
             }, 3000);
             return () => clearTimeout(timer);
         }
@@ -34,7 +36,7 @@ const RunesKeeperRedirect = ({navigation})=> {
     return(
         <View style={RunesKeeperStyles.RksMainView}>
             <View style={RunesKeeperStyles.RksView}>
-                <RunesKeeper/>
+                <Rune backgroundColor={PrimaryTextColor} percentageComplete={80} radius={100} strokeWidth={30}/>
                 <Text style={AuthStyle.title}>RunesKeeper</Text>
                 <Text style={AuthStyle.subtitle}>Gardez Votre savoir</Text>
             </View>
