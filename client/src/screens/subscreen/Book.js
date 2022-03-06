@@ -105,7 +105,6 @@ export const BookScreen = ({route, navigation}) => {
                 <View style={bookStyle.OneSectionContainer}>
                     <TouchableOpacity
                         style={{
-
                             backgroundColor: getColorFromDatabase(2),
                             borderColor: Colors.PrimaryTextColor, ...bookStyle.sectionsIconContainer
                         }}>
@@ -194,7 +193,43 @@ export const BookScreen = ({route, navigation}) => {
     )
 }
 
+const updateStatus = async (status,idUser, idBook, idSection) => {
+    if(status == 0){
+        addBookOnSection(idUser, idBook, idSection)
+
+    }
+}
+
+const deleteBookOnSection = async (idUser, idBook, idSection) => {
+    // Verifier dans un premier temps l'état du bouton (OnKeep, OffKeep)
+    // en fonction de ca, supprimer ou ajouter la section et
+    fetch("http://" + IP_ADRESS + ":4547/Runeskeeper/deleteKeeper", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "idUser": idUser,
+            "idBook": idBook,
+            "idSection": idSection,
+
+        })
+    }).then(response => {
+        return response.json()
+    })
+        .then(responseJSON => {
+            if (!responseJSON.valid) {
+                Alert.alert("ERREUR", responseJSON.message)
+            } else {
+                Alert.alert("VALID", responseJSON.message)
+            }
+        }).catch(error => console.log(error))
+}
+
 const addBookOnSection = async (idUser, idBook, idSection) => {
+
+    // Verifier dans un premier temps l'état du bouton (OnKeep, OffKeep)
+    // en fonction de ca, supprimer ou ajouter la section et
     fetch("http://" + IP_ADRESS + ":4547/Runeskeeper/newKeeper", {
         method: "POST",
         headers: {

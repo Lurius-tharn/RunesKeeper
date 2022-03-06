@@ -32,3 +32,4 @@ connection.connect((error) =>{
 
 const dataRouter = require('./routes/RkRouter.js');
 app.use("/RunesKeeper",dataRouter);
+app.listen
