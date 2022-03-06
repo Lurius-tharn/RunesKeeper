@@ -3,7 +3,7 @@ import {Alert, Image, Text, TouchableOpacity, View} from "react-native"
 import bookStyle from "../../styles/main/BookStyles";
 import ListStyle from "../../styles/main/ListStyle";
 import * as Colors from "../../styles/colors";
-import {IP_ADRESS} from "../../config";
+import {IP_ADRESS} from "../../../config/config";
 
 const Iconpath = '../../assets/icons/'
 /*

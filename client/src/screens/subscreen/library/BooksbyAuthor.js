@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react"
 import { View , Text , Image,ImageBackground ,TouchableOpacity} from "react-native"
 import LibStyle from "../../../styles/main/LibraryStyles";
 import {createStackNavigator} from '@react-navigation/stack'
-import {IP_ADRESS} from "../../../config";
+import {IP_ADRESS} from "../../../../config/config";
 
 import * as Colors from  "../../../styles/colors";
 const Stack = createStackNavigator()
