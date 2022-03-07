@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react"
 import {FlatList, Image, ImageBackground, Text, TouchableOpacity, View} from "react-native"
 import LibStyle from "../../../styles/main/LibraryStyles";
 import {createStackNavigator} from '@react-navigation/stack'
-import {IP_ADRESS} from "../../../config";
+import {IP_ADRESS} from "../../../../config/config";
 
 const Stack = createStackNavigator()
 export const BooksbySectionScreen = ({navigation}) => {

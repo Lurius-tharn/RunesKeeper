@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Alert, CheckBox, Text, TextInput, TouchableOpacity, View} from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AuthStyle from '../../styles/authentification/AuthStyles';
-import {IP_ADRESS} from '../../config';
+import {IP_ADRESS} from '../../../config/config';
 
 export const Login = ({navigation}) => {
     const [pseudo, setPseudo] = useState('')

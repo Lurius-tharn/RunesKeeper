@@ -3,7 +3,7 @@ import { CheckBox, Text, TextInput, View,TouchableOpacity, Alert,Linking  } from
 import AuthStyle from '../../styles/authentification/AuthStyles';
 import { Login } from './Login';
 
-import { IP_ADRESS } from '../../config';
+import { IP_ADRESS } from '../../../config/config';
 export const Register = ({props,navigation }) => {
   
   const [email, setEmail] =  useState('')
