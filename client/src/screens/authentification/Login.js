@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Alert, CheckBox, Text, TextInput, TouchableOpacity, View} from 'react-native'
+import {Alert, CheckBox, Pressable, Text, TextInput, TouchableOpacity, View} from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AuthStyle from '../../styles/authentification/AuthStyles';
 import {IP_ADRESS} from '../../../config/config';
@@ -9,6 +9,21 @@ export const Login = ({navigation}) => {
     const [password, setPassword] = useState('')
     const [isSelected, setSelection] = useState(false);
     let data = {"pseudo": pseudo, "pwd": password}
+    const validate = (email, password) => {
+        const pseudoRegex = /^[a-zA-Z]+$/
+        return {
+            pseudo: pseudoRegex.test(pseudo) && pseudo.length >0  ,
+            password: password.length > 0 && password.length < 5,
+
+        };
+    }
+
+    const errors = validate(pseudo, password);
+    const isDisabled = Object.keys(errors).every(x => errors[x]);
+
+    const getErrorColor = (control) => {
+        return errors[control] ? '#65D4B0' : '#913F3F';
+    }
     return (
 
         <View style={AuthStyle.formView}>
@@ -16,14 +31,18 @@ export const Login = ({navigation}) => {
             <View style={AuthStyle.formContent}>
                 <Text style={AuthStyle.txt}>Votre pseudonyme</Text>
                 <TextInput value={pseudo}
-                           style={AuthStyle.inputText}
+                           placeholder="FitzChevalerie"
+                           style={{...AuthStyle.inputText, borderColor: getErrorColor('pseudo'),  color: getErrorColor('pseudo')}}
                            onChangeText={(text) => setPseudo(text.trim())}>
                 </TextInput>
                 <Text style={AuthStyle.txt}>Votre mot de passe</Text>
 
                 <TextInput value={password}
-                           secureTextEntry={false}
-                           style={AuthStyle.inputText}
+
+                           placeholder="Loinvoyant"
+
+                           secureTextEntry={true}
+                           style={{...AuthStyle.inputText, borderColor: getErrorColor('password'),  color: getErrorColor('password')}}
                            onChangeText={(text) => setPassword(text.trim())}>
                 </TextInput>
                 <View style={AuthStyle.checkBoxView}>
@@ -46,17 +65,20 @@ export const Login = ({navigation}) => {
 
             </View>
 
-            <TouchableOpacity style={AuthStyle.loginButton} onPress={() => {
-                if (!pseudo) {
-                    Alert.alert('ERREUR', "vous devez saisir votre pseudo !")
-                } else if (!password) {
-                    Alert.alert('ERREUR', "vous devez saisir votre mot de passe !")
-                } else {
-                    logIn(data, navigation,isSelected)
-                }
-            }}>
+            <Pressable
+                disabled={!isDisabled}
+                style={({pressed}) => [
+                    AuthStyle.loginButton,
+                    {
+                        opacity: pressed ? 0.5 : 1.0,
+                        backgroundColor: isDisabled ? '#65D4B0' : '#913F3F'
+                    }
+                ]}
+
+               onPress={() => {logIn(data, navigation,isSelected)}}
+            >
                 <Text style={AuthStyle.loginButtonText}>Se connecter</Text>
-            </TouchableOpacity>
+            </Pressable>
 
 
         </View>

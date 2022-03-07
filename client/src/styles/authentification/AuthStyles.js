@@ -79,7 +79,8 @@ const AuthStyle =  StyleSheet.create({
         height:49,
         width:300,
         textAlign:"center",
-        marginBottom:5        
+        marginBottom:5 ,
+        color: '#65D4B0'
     },
     checkBoxView:{
         display:"flex",
