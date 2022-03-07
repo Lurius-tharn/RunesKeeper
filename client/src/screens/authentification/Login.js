@@ -13,7 +13,7 @@ export const Login = ({navigation}) => {
         const pseudoRegex = /^[a-zA-Z]+$/
         return {
             pseudo: pseudoRegex.test(pseudo) && pseudo.length >0  ,
-            password: password.length > 0 && password.length < 5,
+            password: password.length > 0 && password.length < 15,
 
         };
     }

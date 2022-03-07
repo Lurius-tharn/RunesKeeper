@@ -18,7 +18,7 @@ export const Register = ({navigation }) => {
         return {
             pseudo: pseudoRegex.test(pseudo) && pseudo.length >0  ,
             email:emailRegex.test(email) && email.length > 0 ,
-            password: password.length > 0 && password.length < 5,
+            password: password.length > 0 && password.length < 15,
             verifiedPassword: verifiedPassword == password && verifiedPassword.length > 0
         };
     }
@@ -55,7 +55,7 @@ export const Register = ({navigation }) => {
           <Text style={AuthStyle.txt}>Entrez de nouveau votre mot de passe</Text>
 
           <TextInput value={verifiedPassword} 
-              secureTextEntry={false}
+              secureTextEntry={true}
               style={{...AuthStyle.inputText, borderColor: getErrorColor('verifiedPassword'),  color: getErrorColor('verifiedPassword')}}
               onChangeText={(text) => setVerifiedPassword(text.trim())}>
           </TextInput>
