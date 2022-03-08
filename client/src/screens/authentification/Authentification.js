@@ -19,7 +19,7 @@ const Authentification = ({navigation}) => {
     return (
         <View style={AuthStyle.mainView}>
             <View style={AuthStyle.view}>
-                <RunesKeeper/>
+                <RunesKeeper height={'80%'} width={'75%'}/>
             </View>
             <View >
 

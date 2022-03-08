@@ -1,10 +1,10 @@
 import * as React from 'react';
 import  {Svg,G, Path, Rect} from 'react-native-svg';
 
-export default function SvgComponent(props) {
+export default function RunesKeeper({height, width}) {
         return(
 
-    <Svg height="90%" viewBox="0 0 48 58" width="75%" xmlns="http://www.w3.org/2000/svg">
+    <Svg height={height} viewBox="0 0 48 58" width={width} xmlns="http://www.w3.org/2000/svg">
         <G id="Page-1" fill="none" fill-rule="evenodd">
         <G id="025---Magic-Runes" fill-rule="nonzero">
         <Path id="Shape" d="m40 58h4c2.209139 0 4-1.790861 4-4v-30c0-2.209139-1.790861-4-4-4h-4z" fill="#3f5c6c"/>
