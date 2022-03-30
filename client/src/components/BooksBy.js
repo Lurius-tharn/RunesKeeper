@@ -1,13 +1,17 @@
-import {Pressable, Animated, Text, View, StyleSheet,SafeAreaView, Button} from "react-native";
+import {Pressable, Animated, Text, View, StyleSheet, SafeAreaView, Button, Modal} from "react-native";
 import React, {useState, useEffect, useRef} from 'react';
+import * as Colors from "../styles/colors";
+import SvgComponent from "../assets/svg/SvgReader";
+import AuthStyle from "../styles/authentification/AuthStyles";
 
 
 
 
- const BooksByComponent = ({props}) => {
+ const BooksByComponent = ({sortBy, data}) => {
      const translation = useRef(new Animated.Value(0)).current;
      const fadeAnim  = useRef(new Animated.Value(0)).current;
      const translationy = useRef(new Animated.Value(0)).current;
+     const [modalVisible, setModalVisible] = useState(true);
 
      const [push, setPush ] = useState(0)
      const animation = (animatedStyle,animatedToValue) => {
@@ -19,50 +23,57 @@ import React, {useState, useEffect, useRef} from 'react';
          }).start();
      }
      const openModal = () => {
-         if (push % 2 == 0){
-
              animation(translation,30);
              animation(fadeAnim,1);
              animation(translationy,50);
-         }else {
-             animation(translation,0);
-             animation(fadeAnim,0);
-             animation(translationy,0);
-         }
+             setModalVisible(true)
+
+     };
+     const closeModal = () => {
+         animation(translation,0);
+         animation(fadeAnim,0);
+         animation(translationy,0);
+         setTimeout(() => {
+             setModalVisible(false)
+         }, 500);
+
+
+
 
      };
 
-     const DATA = [
-         {
-             id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-             title: 'First Item',
-         },
-         {
-             id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-             title: 'Second Item',
-         },
-         {
-             id: '58694a0f-3da1-471f-bd96-145571e29d72',
-             title: 'Third Item',
-         },{
-             id: '58694a0f-3da1-471f-bd96-145571e29d72',
-             title: 'Third Item',
-         },
-     ];
-     const Item = ({ title }) => (
-         <View style={styles.item}>
-             <Text style={styles.title}>{title}</Text>
-         </View>
+     const Item = ({ titre ,taille, couleur, trierPar}) => (
+             <Pressable
+                 style={({pressed}) => [
+                     {
+                         opacity: pressed ? 0.5 : 1.0,
+                     }, styles.item
+                 ]}
+                 onPress={({pressed}) => {
+                     console.log(data.sort(function (a, b) {
+                         return a[trierPar].localeCompare(b[trierPar]);
+                     }))
+                     console.log(trierPar)
+                 }}
+             >
+                 <SvgComponent title={titre} size={taille} color={couleur} />
+                 <Text style={styles.title}>{titre}</Text>
+             </Pressable>
+
      );
+
      const renderItem = ({ item }) => (
-         <Item title={item.title} />);
+         <Item taille={item.taille} couleur={item.couleur} titre={item.titre} trierPar={item.trierPar} />);
+
+
      return (
          <View style={styles.container}>
 
              <Pressable
                  onPress={({pressed}) => {
                      setPush(push+1)
-                     openModal()
+                     push % 2 == 0 ? openModal() : closeModal()
+
                  }}
 
              >
@@ -79,39 +90,62 @@ import React, {useState, useEffect, useRef} from 'react';
 
              </Pressable>
 
+            <Modal
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() =>closeModal()}
+            >
+                <Pressable style={styles.outsideModal}
+                           onPress={(event) => { if (event.target == event.currentTarget) {
+                               closeModal()
+                           } }} >
+                <Animated.FlatList
+                    style={{
+                        opacity: fadeAnim,
+                        transform: [{translateY: translationy}],
+                        borderRadius:15,
+                        backgroundColor:'#3B404D',
+                        flexGrow: 0,
+                        position:"absolute",
+                        margin:90,
 
-             <Animated.FlatList style={{
 
-                 opacity: fadeAnim,         // Bind opacity to animated value
-                 transform: [{translateY: translationy}],
-                 borderRadius:15,
-                 backgroundColor:'#3B404D',
-                 padding:30,
-                 maxHeight: DATA.length*50
 
-             }} data={DATA}   renderItem={renderItem}
-                                keyExtractor={item => item.id} >
+                    }}
+                    data={sortBy}
 
-             </Animated.FlatList>
+                    renderItem={renderItem}
+                    keyExtractor={item => item.titre} >
+
+                </Animated.FlatList>
+                </Pressable>
+            </Modal>
+
 
          </View>
      );
  }
 
 const styles = StyleSheet.create({
+
     container: {
+
         flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-        position: 'relative'
+        alignItems: "flex-start",
+        justifyContent: "flex-start",
+        position:"relative",
+
     },
     fadingContainer: {
+        margin:20,
+
         width: 60,
-        height:10,
-        backgroundColor: "powderblue",
-        marginBottom:5,
-        marginTop:5,
-        borderRadius:15
+        height:6,
+        backgroundColor: "#484E5F",
+        marginBottom:2,
+        marginTop:2,
+
+
     },
     fadingText: {
         fontSize: 28
@@ -119,18 +153,36 @@ const styles = StyleSheet.create({
     buttonRow: {
         flexBasis: 100,
         justifyContent: "space-evenly",
-        marginVertical: 16
+        marginVertical: 16,
+
     },
     item: {
-        padding: 10,
+        padding: 20,
+        zIndex:1,
+        paddingHorizontal:30,
+        display:"flex",
+        flexDirection:"row",
+        justifyContent:"space-around",
         borderBottomColor:'#4A5061',
-        borderBottomWidth:0.5
+        borderBottomWidth:0.5,
+        position:"relative"
+
+
 
 
     },
     title: {
-        fontSize: 15,
+        marginLeft:20,
+        fontSize: 20,
+        fontFamily: "Montserrat",
+        fontWeight: "200",
+        color:Colors.WhiteColor,
+        justifyContent:'center',
     },
+
+    outsideModal:{
+        flex: 1,
+    }
 });
 
 export default BooksByComponent;
