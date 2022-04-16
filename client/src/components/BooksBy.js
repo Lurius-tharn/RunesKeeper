@@ -1,1 +1,1 @@
-print(ghegey)
+print(ghegeytttv)
