@@ -1,16 +1,40 @@
-import React from "react"
+import React, {useState} from "react"
 import { View , Text , Image,FlatList ,TouchableOpacity} from "react-native"
 import ListStyle from "../../styles/main/ListStyle";
+import BooksBy from "../../components/BooksBy";
 
 export const ListScreen = ({route, navigation}) => {
     const Iconpath = '../../assets/icons/'
+    const sortBy =
+        [{
+            titre: 'Titre',taille:'32',couleur:'#FFFFFF',trierPar:"title"
+        },{
+        titre: 'Auteur',taille:'32',couleur:'#FFFFFF',trierPar:"author"
+    },{
+        titre: 'Publisher',taille:'32',couleur:'#FFFFFF',trierPar:"publisher"
+    },{
+            titre: 'subtitle',taille:'32',couleur:'#FFFFFF',trierPar:"subtitle"
+        },
+
+]
+
+
+
 
     const {dataBooks,nbBooks} = route.params;
+    const [Books,setBooks] = useState(dataBooks);
+
+
+
+    const isChanged = {
+        value:false
+    };
+
+
     return(
-        
         <View style={ListStyle.listContainer}>
             <View style={ListStyle.upContainer}>
-            <Image style={{height:21, width:51}} source = {require(Iconpath+"trier.png")} />
+            <BooksBy sortBy={sortBy} data={dataBooks} isChanged={setBooks}/>
 
                 <View style ={ListStyle.bookNumberContainer}>
                     <Text  style={ListStyle.numberText}> {JSON.stringify(nbBooks)} livres </Text>
@@ -19,16 +43,17 @@ export const ListScreen = ({route, navigation}) => {
           
             <FlatList 
                 data={dataBooks}
-                keyExtractor={(item,index) => index.toString()}  
+                extraData={Books}
+                keyExtractor={(item,index) => index.toString()}
+                refreshing={true}
                 renderItem={({ item }) => {
                     return (
                         <TouchableOpacity
                             onPress = {() => {
-                                navigation.navigate("Book", {
-                                    name:item.title,
-                                    dataBook:item
-                                })
-
+                                // navigation.navigate("Book", {
+                                //     name:item.title,
+                                //     dataBook:item
+                                // })
                             }}
                         >
                              <View  style={ListStyle.itemContainer}>

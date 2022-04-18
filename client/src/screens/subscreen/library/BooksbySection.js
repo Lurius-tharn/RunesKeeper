@@ -37,23 +37,7 @@ export const BooksbySectionScreen = ({navigation}) => {
             <View>
                 <FlatList
                     data={dataSource}
-                    ListHeaderComponentStyle={{elevation:0.1, zIndex:100000}}
-                    ListHeaderComponent={
-                            <BooksBy
-                                data={dataSource}
-                                sortBy={
-                                    [{
-                                        titre: 'Titre',taille:'32',couleur:'#FFFFFF',trierPar:""
-                                    },{
-                                    titre: 'Auteur',taille:'32',couleur:'#FFFFFF',trierPar:""
-                                    },{
-                                    titre: 'Pref',taille:'32',couleur:'#FFFFFF',trierPar:"sectionName"
-                                    },
 
-
-                            ]}></BooksBy>
-
-                        }
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={({item}) => {
                         let color;

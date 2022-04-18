@@ -7,13 +7,17 @@ import AuthStyle from "../styles/authentification/AuthStyles";
 
 
 
- const BooksByComponent = ({sortBy, data}) => {
+ const BooksByComponent = ({sortBy, data, isChanged}) => {
      const translation = useRef(new Animated.Value(0)).current;
      const fadeAnim  = useRef(new Animated.Value(0)).current;
      const translationy = useRef(new Animated.Value(0)).current;
      const [modalVisible, setModalVisible] = useState(true);
 
      const [push, setPush ] = useState(0)
+
+     const [dataSorted, setData ] = useState(data)
+     const [isChangedSorted, setIschange ] = useState(isChanged)
+
      const animation = (animatedStyle,animatedToValue) => {
          Animated.timing(animatedStyle, {
              toValue: animatedToValue,
@@ -50,10 +54,12 @@ import AuthStyle from "../styles/authentification/AuthStyles";
                      }, styles.item
                  ]}
                  onPress={({pressed}) => {
-                     console.log(data.sort(function (a, b) {
-                         return a[trierPar].localeCompare(b[trierPar]);
-                     }))
-                     console.log(trierPar)
+                isChanged(data.sort(function (a, b) {
+                    return a[trierPar].localeCompare(b[trierPar]);
+                }))
+
+
+
                  }}
              >
                  <SvgComponent title={titre} size={taille} color={couleur} />
