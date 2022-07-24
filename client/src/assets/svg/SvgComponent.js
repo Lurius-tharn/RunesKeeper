@@ -4,7 +4,6 @@ import Svg, { Path } from "react-native-svg"
 const SvgComponent = ({title,size,color, props}) => {
     switch (title){
         case 'Titre':
-            console.log("dgv")
             return(
                 <Svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -22,7 +21,6 @@ const SvgComponent = ({title,size,color, props}) => {
                     <Path d="M260.605 339.988a7.5 7.5 0 0 0 7.14-7.844c-2.007-42.772 7.519-84.454 28.314-123.887a7.5 7.5 0 1 0-13.267-6.998c-22.062 41.833-32.165 86.105-30.03 131.588a7.5 7.5 0 0 0 7.843 7.141z" fill={ color}/>
                 </Svg>
             );
-            break;
         default:
             return(
                 <Svg

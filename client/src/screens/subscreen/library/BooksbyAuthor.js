@@ -14,7 +14,6 @@ export const BooksbyAuthorScreen = ({navigation}) => {
             .then((response) => response.json())
             .then((responseJson) => {
                 setauthorBookDataSource(responseJson)
-                log
             })
             .catch((error) => {
                 console.error(error);

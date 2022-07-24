@@ -1,8 +1,7 @@
-import {Pressable, Animated, Text, View, StyleSheet, SafeAreaView, Button, Modal} from "react-native";
-import React, {useState, useEffect, useRef} from 'react';
+import {Pressable, Animated, Text, View, StyleSheet, Modal} from "react-native";
+import React, {useState, useRef} from 'react';
 import * as Colors from "../styles/colors";
-import SvgComponent from "../assets/svg/SvgReader";
-import AuthStyle from "../styles/authentification/AuthStyles";
+import SvgComponent from "../assets/svg/SvgComponent";
 
 
 
@@ -52,7 +51,7 @@ import AuthStyle from "../styles/authentification/AuthStyles";
                          opacity: pressed ? 0.5 : 1.0,
                      }, styles.item
                  ]}
-                 onPress={({pressed}) => {
+                 onPress={({}) => {
                      trie(trierPar)
                      console.log("click")
 
@@ -72,7 +71,7 @@ import AuthStyle from "../styles/authentification/AuthStyles";
              <View style={styles.container}>
 
                  <Pressable
-                     onPress={({pressed}) => {
+                     onPress={({}) => {
                          setPush(push+1)
                          push % 2 == 0 ? openModal() : closeModal()
 

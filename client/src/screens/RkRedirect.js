@@ -7,7 +7,7 @@ import RunesKeeper from "../assets/svg/RunesKeeper";
 import RunesKeeperStyles from "../styles/RunesKeeperStyles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useIsFocused} from "@react-navigation/native";
-import BooksBy from "../components/BooksBy";
+import BooksBy from "../components/BooksByComponent";
 
 
 const RunesKeeperRedirect = ({navigation})=> {

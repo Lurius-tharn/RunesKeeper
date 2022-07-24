@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react"
 import {View, Text, Image, FlatList, TouchableOpacity, RefreshControl} from "react-native"
 import ListStyle from "../../styles/main/ListStyle";
-import BooksBy from "../../components/BooksBy";
+import BooksBy from "../../components/BooksByComponent";
 
 export const ListScreen = ({route, navigation}) => {
     const Iconpath = '../../assets/icons/'

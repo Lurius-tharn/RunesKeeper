@@ -3,7 +3,7 @@ import {FlatList, Image, ImageBackground, Modal, StyleSheet,Pressable, Text, Tou
 import LibStyle from "../../../styles/main/LibraryStyles";
 import {createStackNavigator} from '@react-navigation/stack'
 import {IP_ADRESS} from "../../../../config/config";
-import BooksBy from "../../../components/BooksBy";
+import BooksBy from "../../../components/BooksByComponent";
 
 const Stack = createStackNavigator()
 export const BooksbySectionScreen = ({navigation}) => {
