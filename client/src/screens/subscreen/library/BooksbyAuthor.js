@@ -13,7 +13,7 @@ export const BooksbyAuthorScreen = ({navigation}) => {
         fetch("http://" + IP_ADRESS + ":4547/Runeskeeper/allBooksbyAuthor/1")
             .then((response) => response.json())
             .then((responseJson) => {
-                setDataSource(responseJson)
+                setauthorBookDataSource(responseJson)
             })
             .catch((error) => {
                 console.error(error);

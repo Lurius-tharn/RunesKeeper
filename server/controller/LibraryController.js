@@ -46,6 +46,7 @@ module.exports = {
                     return authors;
                     
                   }, []);
+
                 res.send(result);
         });          
     }, 
@@ -60,6 +61,7 @@ module.exports = {
         const {userId} = req.params;
         bookData.getAllBooksbyCategories(req.con,userId, 
             (err,bookRows) =>{
+
                 res.send(bookRows);
         });          
     },

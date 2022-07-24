@@ -1,16 +1,40 @@
-import React from "react"
-import { View , Text , Image,FlatList ,TouchableOpacity} from "react-native"
+import React, {useEffect, useState} from "react"
+import {View, Text, Image, FlatList, TouchableOpacity, RefreshControl} from "react-native"
 import ListStyle from "../../styles/main/ListStyle";
+import BooksBy from "../../components/BooksByComponent";
 
 export const ListScreen = ({route, navigation}) => {
     const Iconpath = '../../assets/icons/'
+    const sortBy =
+        [{
+            titre: 'Titre',taille:'32',couleur:'#FFFFFF',trierPar:"title"
+        },{
+        titre: 'Auteur',taille:'32',couleur:'#FFFFFF',trierPar:"author"
+    },{
+        titre: 'Publisher',taille:'32',couleur:'#FFFFFF',trierPar:"publisher"
+    },{
+            titre: 'subtitle',taille:'32',couleur:'#FFFFFF',trierPar:"subtitle"
+        },
+
+]
+
 
     const {dataBooks,nbBooks} = route.params;
+    const [Books,setBooks] = useState(dataBooks);
+    const trieValue = "publisher";
+    const [trie, setTrie] = useState(trieValue);
+
+    const [refreshing, setRefreshing] = useState(true);
+
+    const isChanged = {
+        value:false
+    };
+
+
     return(
-        
         <View style={ListStyle.listContainer}>
             <View style={ListStyle.upContainer}>
-            <Image style={{height:21, width:51}} source = {require(Iconpath+"trier.png")} />
+            <BooksBy sortBy={sortBy} trie ={setTrie}/>
 
                 <View style ={ListStyle.bookNumberContainer}>
                     <Text  style={ListStyle.numberText}> {JSON.stringify(nbBooks)} livres </Text>
@@ -18,17 +42,21 @@ export const ListScreen = ({route, navigation}) => {
             </View>
           
             <FlatList 
-                data={dataBooks}
-                keyExtractor={(item,index) => index.toString()}  
+                data={Books.sort(function (a, b) {
+                    return a[trie].localeCompare(b[trie]);
+                })}
+                extraData={Books}
+                keyExtractor={(item,index) => index.toString()}
+                refreshing={true}
                 renderItem={({ item }) => {
                     return (
                         <TouchableOpacity
                             onPress = {() => {
+                                console.log(trie)
                                 navigation.navigate("Book", {
                                     name:item.title,
                                     dataBook:item
                                 })
-
                             }}
                         >
                              <View  style={ListStyle.itemContainer}>

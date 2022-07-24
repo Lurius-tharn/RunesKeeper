@@ -4,11 +4,12 @@ import * as Colors from "../colors";
 const LibStyle =  StyleSheet.create({
 
     container:{
-      
+        display:"flex",
+        flexDirection:"column",
     },
     blocContainer: {
         display:"flex",
-        
+        zIndex:-10000,
         flexDirection:"column",
         alignItems:"center",
         backgroundColor:Colors.WhiteColor,
@@ -44,7 +45,8 @@ containerTitle: {
         justifyContent:"flex-start",
         flexDirection:'row',
         height: 104,
-       marginTop:30
+       marginTop:30,
+
     },
     thumbnail:{
         width: 60, 

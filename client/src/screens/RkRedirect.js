@@ -7,6 +7,8 @@ import RunesKeeper from "../assets/svg/RunesKeeper";
 import RunesKeeperStyles from "../styles/RunesKeeperStyles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useIsFocused} from "@react-navigation/native";
+import BooksBy from "../components/BooksByComponent";
+
 
 const RunesKeeperRedirect = ({navigation})=> {
     const isFocused = useIsFocused();
@@ -39,7 +41,9 @@ const RunesKeeperRedirect = ({navigation})=> {
                 <Text style={AuthStyle.title}>RunesKeeper</Text>
                 <Text style={AuthStyle.subtitle}>Gardez Votre savoir</Text>
             </View>
-        </View>
+            </View>
+
+
     )
 }
 

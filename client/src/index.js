@@ -50,14 +50,14 @@ const Index = () => {
                         name="List"
                         component={ListScreen}
                         options={({route}) => ({
-                            title: route.params.name
+                            titre: route.params.name
                         })}
                     />
                     <Stack.Screen
                         name="Book"
                         component={BookScreen}
                         options={({route}) => ({
-                            title: route.params.name
+                            titre: route.params.name
                         })}
                     />
                 </Stack.Group>

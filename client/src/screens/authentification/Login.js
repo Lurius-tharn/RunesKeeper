@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
-import {Alert, CheckBox, Pressable, Text, TextInput, TouchableOpacity, View} from 'react-native'
+import {Alert, Pressable, Text, TextInput, TouchableOpacity, View} from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AuthStyle from '../../styles/authentification/AuthStyles';
 import {IP_ADRESS} from '../../../config/config';
+import Checkbox from 'expo-checkbox';
 
 export const Login = ({navigation}) => {
     const [pseudo, setPseudo] = useState('')
@@ -47,7 +48,7 @@ export const Login = ({navigation}) => {
                 </TextInput>
                 <View style={AuthStyle.checkBoxView}>
 
-                    <CheckBox
+                    <Checkbox
                         value={isSelected}
                         onValueChange={setSelection}
                         style={AuthStyle.checkbox}
