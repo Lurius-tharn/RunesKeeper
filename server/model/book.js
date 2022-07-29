@@ -24,7 +24,7 @@ module.exports = {
     // get all books order by- authors(Library screen, call before the user go on the screen)
     getAllBooksbyauthor:(connection,userId, callback) =>{
         
-        stmt = 'select distinct b.author as auteur, b.thumbnail, b.Isbn from BOOK b '+
+        stmt = 'SELECT distinct b.*  from BOOK b '+
             'inner join keeper k On k.book = b.id_book  '+
             '  where k.user = ? ORDER BY b.author ';
         connection.query(stmt,[userId],callback)

@@ -7,6 +7,43 @@ const LibStyle =  StyleSheet.create({
         display:"flex",
         flexDirection:"column",
     },
+    authorBlocTitleContainer : {
+        top:35,
+        backgroundColor:Colors.DarkBlue,
+        display: "flex",
+        alignItems:"flex-start",
+        justifyContent:"center",
+        width:55+"%",
+        height:50,
+        borderRadius:10,
+        marginBottom:20,
+        marginLeft:20,
+
+
+
+    },
+    authorContainer:{
+        display:"flex",
+        zIndex:-10000,
+        flexDirection:"row",
+        alignItems:"flex-start",
+
+        backgroundColor:Colors.WhiteColor,
+        minHeight:130,
+        height:130,
+        margin:20,
+        borderRadius:10,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 3,
+        },
+        shadowOpacity: 0.27,
+        shadowRadius: 4.65,
+
+        elevation: 6,
+
+    },
     blocContainer: {
         display:"flex",
         zIndex:-10000,
@@ -37,7 +74,7 @@ containerTitle: {
     titleTxt:{
         color:Colors.WhiteColor,
         fontFamily:"Montserrat",
-        fontSize:19,
+        fontSize:22,
     },
     booksContainer:{
         display: "flex",
@@ -80,6 +117,17 @@ containerTitle: {
         fontFamily:"Montserrat",
         fontSize: 17,
         lineHeight: 40,
+    },
+    roundedNavigationButton: {
+        alignSelf:"center",
+        display:"flex",
+        backgroundColor: Colors.DarkBlue,
+        justifyContent:"center",
+        width: 50,
+        height:50,
+        borderRadius:50,
+        marginRight:10
+
     }
 })
 

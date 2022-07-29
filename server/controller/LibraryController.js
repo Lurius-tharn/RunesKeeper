@@ -37,9 +37,9 @@ module.exports = {
         bookData.getAllBooksbyauthor(req.con,userId, 
             (err,bookRows) =>{
                 const result = bookRows.reduce(function(authors, item) {
-                    let author = authors.find(author => author.Auteur === item.auteur);
+                    let author = authors.find(author => author.Auteur === item.author);
                     if(!author) {
-                        author = { Auteur : item.auteur, data : [] };
+                        author = { Auteur : item.author, data : [] };
                       authors.push(author);
                     } 
                     author.data.push(item);
