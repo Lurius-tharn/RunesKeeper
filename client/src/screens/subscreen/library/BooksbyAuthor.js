@@ -1,22 +1,33 @@
 import React, {useEffect, useState} from "react"
-import {View, FlatList, Image, ImageBackground, TouchableOpacity, Text} from "react-native"
+import {FlatList, Image, ImageBackground, Text, TouchableOpacity, View} from "react-native"
 import LibStyle from "../../../styles/main/LibraryStyles";
 import {createStackNavigator} from '@react-navigation/stack'
 import {IP_ADRESS} from "../../../../config/config";
+import ListStyle from "../../../styles/main/ListStyle";
+import BooksBy from "../../../components/BooksByComponent";
 
-import BooksByComponent from "../../../components/BooksByComponent";
 const Stack = createStackNavigator()
 const Iconpath = '../../../assets/icons/'
 
 export const BooksbyAuthorScreen = ({navigation}) => {
 
-    const [authorBookDataSource, setauthorBookDataSource ] = useState([])
+    const sortBy =
+        [{
+            titre: 'De A - Z', taille: '32', couleur: '#FFFFFF', trierPar: "aOrder"
+        }, {
+            titre: 'De Z - A', taille: '32', couleur: '#FFFFFF', trierPar: "zOrder"
+        }
+
+        ]
+    const trieValue = "aOrder";
+
+    const [authorBookDataSource, setauthorBookDataSource] = useState([])
+    const [trie, setTrie] = useState(trieValue);
 
     const fetchData = () => {
         fetch("http://" + IP_ADRESS + ":4547/Runeskeeper/allBooksbyAuthor/1")
             .then((response) => response.json())
             .then((responseJson) => {
-                console.log(responseJson)
                 setauthorBookDataSource(responseJson)
             })
             .catch((error) => {
@@ -31,18 +42,24 @@ export const BooksbyAuthorScreen = ({navigation}) => {
     }, []);
     return (
 
-        <View >
 
-            <BooksByComponent></BooksByComponent>
-            <View style={LibStyle.container}>
+        <View style={LibStyle.listContainer}>
+            <View style={ListStyle.upContainer}>
+                <BooksBy sortBy={sortBy} trie={setTrie}/>
+            </View>
+            <FlatList
 
-                <View>
+                data={authorBookDataSource.sort((a, b) => {
+                    console.log(trie)
+                    return trie === "aOrder" ? 1 : -1;
+                })}
+                extraData={authorBookDataSource}
 
-                    <FlatList
-                    data={authorBookDataSource}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={({item}) => {
-                        return(
+                refreshing={true}
+
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({item}) => {
+                    return (
                         <View>
                             <View style={LibStyle.container}>
                                 <View
@@ -86,7 +103,6 @@ export const BooksbyAuthorScreen = ({navigation}) => {
                                                 return (
                                                     <TouchableOpacity
                                                         onPress={() => {
-                                                            console.log(data)
                                                             navigation.navigate("Book", {
                                                                 name: data.title,
                                                                 dataBook: data
@@ -125,8 +141,8 @@ export const BooksbyAuthorScreen = ({navigation}) => {
                                             })
                                         }}
                                     >
-                                        <Image style={{height: 40, width: 40, alignSelf:"center"}}
-                                               source={require(Iconpath+"arrow_right.png")}/>
+                                        <Image style={{height: 40, width: 40, alignSelf: "center"}}
+                                               source={require(Iconpath + "arrow_right.png")}/>
 
 
                                     </TouchableOpacity>
@@ -134,20 +150,19 @@ export const BooksbyAuthorScreen = ({navigation}) => {
                                 </View>
                             </View>
                         </View>
-                        )
+                    )
 
 
-                    }}
-                    >
+                }}
+            >
 
 
-                    </FlatList>
+            </FlatList>
 
 
-
-
-                </View>
         </View>
-        </View>
+
     )
+
+
 }
