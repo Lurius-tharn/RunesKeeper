@@ -47,8 +47,8 @@ const BooksByComponent = ({sortBy, trie}) => {
                 }, styles.item
             ]}
             onPress={({}) => {
+                console.log("On veut trier par : " + trierPar)
                 trie(trierPar)
-
             }}
         >
             <SvgComponent title={titre} size={taille} color={couleur}/>

@@ -84,4 +84,4 @@ export const ListScreen = ({route, navigation}) => {
 
         </View>
     )
-}
+};

@@ -44,17 +44,21 @@ export const BooksbyAuthorScreen = ({navigation}) => {
 
 
         <View style={LibStyle.listContainer}>
-            <View style={ListStyle.upContainer}>
-                <BooksBy sortBy={sortBy} trie={setTrie}/>
-            </View>
             <FlatList
+                ListHeaderComponent={<View style={ListStyle.upContainer}>
+                    <BooksBy sortBy={sortBy} trie={setTrie}/>
 
-                data={authorBookDataSource.sort((a, b) => {
-                    console.log(trie)
-                    return trie === "aOrder" ? 1 : -1;
-                })}
+                    <View style={ListStyle.bookNumberContainer}>
+                        <Text
+                            style={ListStyle.numberText}> {Object.keys(authorBookDataSource).length} Auteurs </Text>
+                    </View>
+                </View>}
+                data={authorBookDataSource.sort((a, b) => trie == "aOrder" ?
+                    a["Auteur"].localeCompare(b["Auteur"]) :
+                    b["Auteur"].localeCompare(a["Auteur"])
+                )}
                 extraData={authorBookDataSource}
-
+                style={{height: 100 + "%"}}
                 refreshing={true}
 
                 keyExtractor={(item, index) => index.toString()}
