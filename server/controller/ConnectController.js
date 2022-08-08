@@ -3,86 +3,85 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 module.exports = {
-    signin: (req,res) =>{
-        const{pseudo,password} = req.body;
+    signin: (req, res) => {
+        const {pseudo, password} = req.body;
 
         if (typeof pseudo !== 'undefined' || typeof password !== 'undefined') {
 
-            userData.getUser(req.con,pseudo, (err,rows) => {
+            userData.getUser(req.con, pseudo, (err, rows) => {
                 if (rows.length == 0) {
                     res.json({
-                        "valid" : false,
-                        "message" : "pseudonyme incorrect!"
+                        "valid": false,
+                        "message": "pseudonyme incorrect!"
                     })
 
-                }else{
+                } else {
                     console.log(password, rows[0].password);
-                    bcrypt.compare(password.trim(), rows[0].password, (err,result) =>{
+                    bcrypt.compare(password.trim(), rows[0].password, (err, result) => {
                         if (result == true) {
-                            console.log("lets goo");
 
                             res.json({
-                                "valid" : true,
-                                "message" : "Succès !",
-                                "pseudo" : pseudo,
-                                "userId" :rows[0].id_user
+                                "valid": true,
+                                "message": "Succès !",
+                                "pseudo": pseudo,
+                                "userId": rows[0].id_user
                             })
                             //Access to the home page
                         } else {
                             res.json({
-                                "valid" : false,
-                                "message" : "mot de passe saisie incorrect !"
+                                "valid": false,
+                                "message": "mot de passe saisie incorrect !"
                             })
                         }
                     })
                 }
             })
-            
+
         }
     },
-    signup: (req,res) => {
-        
-        const {pseudo,email,password, repeatPassword} = req.body;
+    signup: (req, res) => {
+
+        const {pseudo, email, password, repeatPassword} = req.body;
 
         if (pseudo == "") {
             req.json({
-                "valid" : false,
-                "message" : "Inscrivez votre pseudonyme !"
+                "valid": false,
+                "message": "Inscrivez votre pseudonyme !"
             })
-        }else if(email == "") {
+        } else if (email == "") {
             req.json({
-                "valid" : false,
-                "message" : "Inscrivez votre email !"
+                "valid": false,
+                "message": "Inscrivez votre email !"
             })
-        }else if(password == "") {
+        } else if (password == "") {
             req.json({
-                "valid" : false,
-                "message" : "Inscrivez votre mot de passe !"
+                "valid": false,
+                "message": "Inscrivez votre mot de passe !"
             })
-        }else if(repeatPassword == "" && repeatPassword !== password) {
+        } else if (repeatPassword == "" && repeatPassword !== password) {
             req.json({
-                "valid" : false,
-                "message" : "vérification incomplète"
+                "valid": false,
+                "message": "vérification incomplète"
             })
-        }else{
+        } else {
             bcrypt.hash(password, saltRounds, (err, hash) => {
-                if (err) 
-                console.log(err);
-            
-                userData.newUser(req.con,pseudo,email,hash,(err,rows) => {
-                    if(err){
+                if (err)
+                    console.log(err);
+
+                userData.newUser(req.con, pseudo, email, hash, (err, rows) => {
+                    if (err) {
                         res.json({
-                            "valid" : false,
-                            "message" : "Erreur ! Adresse email ou pseudo déja existant"
-                        })  
-                    }else{
+                            "valid": false,
+                            "message": "Erreur ! Adresse email ou pseudo déja existant"
+                        })
+                    } else {
                         res.json({
-                            "valid" : true,
-                            "message" : "Succès !"
-                        }) 
+                            "valid": true,
+                            "message": "Succès !"
+                        })
                     }
-                     
-    
+
+
                 })
             })
         }
