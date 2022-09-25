@@ -14,6 +14,8 @@ const Iconpath = '../../assets/icons/'
 * Retirer d'une section
 *
 * */
+
+// REFAIRE l'appel d'un livre ici
 export const BookScreen = ({route, navigation}) => {
     const {dataBook} = route.params;
     const authorApi = {}
@@ -193,8 +195,8 @@ export const BookScreen = ({route, navigation}) => {
     )
 }
 
-const updateStatus = async (status,idUser, idBook, idSection) => {
-    if(status == 0){
+const updateStatus = async (status, idUser, idBook, idSection) => {
+    if (status == 0) {
         addBookOnSection(idUser, idBook, idSection)
 
     }

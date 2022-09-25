@@ -4,32 +4,33 @@ var app = express();
 var mysql = require('mysql');
 var bodyParser = require('body-parser');
 
-app.use(bodyParser.json({type:'application/json'}))
-app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.json({type: 'application/json'}))
+app.use(bodyParser.urlencoded({extended: true}));
 
 var connection = mysql.createConnection({
-    host:'localhost',
-    port:'3306',
-    user:'RunesKeeper',
-    password:'runeskeeper',
-    database:'runeskeeper'
+    host: 'localhost',
+    port: '3306',
+    user: 'RunesKeeper',
+    password: 'runeskeeper',
+    database: 'RunesKeeper',
+
 });
-app.use((req,res,next) => {
+app.use((req, res, next) => {
     req.con = connection,
-    next()
+        next()
 });
 
-var server = app.listen(4547, () =>{
+var server = app.listen(4547, () => {
     var host = server.address().address;
     var port = server.address().port;
 });
 
-connection.connect((error) =>{
-    if(error) console.log(error);
+connection.connect((error) => {
+    if (error) console.log(error);
     else console.log("Serveur lancé sur le port " + server.address().port);
 
 });
 
 const dataRouter = require('./routes/RkRouter.js');
-app.use("/RunesKeeper",dataRouter);
+app.use("/RunesKeeper", dataRouter);
 app.listen

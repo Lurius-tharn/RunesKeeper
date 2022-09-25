@@ -1,5 +1,5 @@
-const userData = require("../model/user.js");
-const bcrypt = require('bcrypt');
+const userData = require("../model/User");
+const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 
 module.exports = {

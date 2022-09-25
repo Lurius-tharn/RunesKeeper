@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const libraryController = require('../controller/LibraryController');
-const connectController = require('../controller/connectController');
+const connectController = require('../controller/ConnectController');
 const userController = require('../controller/UserController');
 
 //connectController Declaration
