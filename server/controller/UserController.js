@@ -1,4 +1,4 @@
-const bookData = require("../model/book")
+const bookData = require("../model/Book")
 
 module.exports = {
     newKeeper: (req, res) => {

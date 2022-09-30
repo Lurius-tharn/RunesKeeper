@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const libraryController = require('../controller/LibraryController');
-const connectController = require('../controller/connectController');
+const connectController = require('../controller/ConnectController');
 const userController = require('../controller/UserController');
 
 //connectController Declaration
@@ -18,4 +18,7 @@ router.get("/bookbyIsbn/:userId/:isbn", libraryController.BookbyIsbn);
 router.get("/sectionsofBook/:userId/:isbn", libraryController.SectionsofBook);
 
 router.post("/newKeeper", userController.newKeeper)
+/*router.post("/newBook", userController.newBook)
+router.post("/newBook", userController.newBook)*/
+
 module.exports = router
