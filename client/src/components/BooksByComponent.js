@@ -119,8 +119,6 @@ const BooksByComponent = ({sortBy, trie}) => {
                     </Animated.FlatList>
                 </Pressable>
             </Modal>
-
-
         </View>
     );
 }

@@ -60,7 +60,7 @@ const Navbar = ({route, navigation}) => {
     return (
         <Tab.Navigator
             screenOptions={
-                {
+                [{
                     "tabBarActiveTintColor": Colors.WhiteColor,
                     "tabBarInactiveTintColor": Colors.WhiteColor,
                     "tabBarStyle": [
@@ -70,23 +70,25 @@ const Navbar = ({route, navigation}) => {
                         null
                     ]
                 },
-
                 ({route}) => ({
-                tabBarLabel: ({focused, color, size}) => {
-                return (
-                <Text
-                style={{
-                fontSize: 12,
-                fontWeight: '200',
-                fontFamily:'Montserrat',
-                opacity : focused ? 100 : 70, height: focused ? size : 0
-            }}>
-            {focused ? route.name.toUpperCase() : false}
-                </Text>
-
-                )
-            },
-            })
+                    tabBarLabel: ({focused, color, size}) => {
+                    return (
+                    <Text
+                    style={{
+                    fontSize: 12,
+                    fontWeight: '200',
+                    fontFamily:'Montserrat',
+                    opacity : focused ? 100 : 70, height: focused ? size : 0
+                }}>
+                {focused ? route.name.toUpperCase() : false}
+                    </Text>
+    
+                    )
+                },
+                })
+]
+                
+        
             }
 
         >
