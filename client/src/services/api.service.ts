@@ -1,4 +1,4 @@
-const axios = require('axios');
+import axios from 'axios';
 import { environment } from '../../environments/environment';
 
 export class ApiService {
@@ -8,7 +8,7 @@ export class ApiService {
           Object.keys(params).forEach((key) => params[key] == null && delete params[key]);
         }
         return Promise.resolve()
-          .then(() => axios.get(environment.origin + url, { params }).toPromise())
+          .then(() => axios.get(environment.origin + url, { params }))
           .catch((error) => Promise.reject(error));
       }
 
@@ -17,19 +17,19 @@ export class ApiService {
           Object.keys(params).forEach((key) => params[key] == null && delete params[key]);
         }
         return Promise.resolve()
-          .then(() => axios.delete(environment.api + url, { params }).toPromise())
+          .then(() => axios.delete(environment.api + url, { params }))
           .catch((error) => Promise.reject(error));
       }
     
       public post(url: string, body?: any): Promise<any> {
         return Promise.resolve()
-          .then(() => axios.post(environment.api + url, body).toPromise())
+          .then(() => axios.post(environment.api + url, body))
           .catch((err) => Promise.reject(err));
       }
     
       public put(url: string, body?: any): Promise<any> {
         return Promise.resolve()
-          .then(() => axios.put(environment.api + url, body).toPromise())
+          .then(() => axios.put(environment.api + url, body))
           .catch((err) => Promise.reject(err));
       }
 }
