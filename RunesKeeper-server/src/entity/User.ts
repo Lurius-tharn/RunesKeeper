@@ -16,19 +16,19 @@ import {Column, Entity, PrimaryGeneratedColumn} from "typeorm"
  *           password:
  *             type: string
  * */
-@Entity ()
+@Entity()
 export class User {
 
-	@PrimaryGeneratedColumn ()
-	id_user: number
+    @PrimaryGeneratedColumn()
+    id_user: number
 
-	@Column ()
-	pseudonyme: string
+    @Column()
+    pseudonyme: string
 
-	@Column ()
-	email: string
+    @Column()
+    email: string
 
-	@Column ()
-	password: string
+    @Column()
+    password: string
 
 }
