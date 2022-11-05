@@ -16,13 +16,12 @@ type RootStackParamList = {
     Authentication: undefined;
     User: undefined;
     Main: undefined;
-    List: { name: string }
-    Book: { name: string }
+    List: { sectionName: string }
+    Book: { title: string }
 }
 const RootStack = createStackNavigator<RootStackParamList>();
 const Index = () => {
     return (
-
         <NavigationContainer>
             <RootStack.Navigator screenOptions={{headerShown: false}}>
                 <RootStack.Screen
@@ -51,7 +50,7 @@ const Index = () => {
                         fontFamily: "Montserrat",
                         fontSize: 32,
                         color: PrimaryTextColor
-                    }
+                    },
                 }
 
 
@@ -60,14 +59,14 @@ const Index = () => {
                         name="List"
                         component={ListScreen}
                         options={({route}): any => ({
-                            titre: route?.params.name
+                            headerTitle: route?.params.sectionName
                         })}
                     />
                     <RootStack.Screen
                         name="Book"
                         component={BookScreen}
                         options={({route}): any => ({
-                            titre: route.params?.name
+                            headerTitle: route.params?.title
                         })}
 
                     />

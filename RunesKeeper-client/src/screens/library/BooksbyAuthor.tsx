@@ -3,6 +3,8 @@ import {FlatList, Image, ImageBackground, Text, TouchableOpacity, View} from "re
 import ListStyle from "../../styles/main/ListStyle";
 import {BooksByComponent} from "../../components/BooksByComponent";
 import LibStyle from "../../styles/main/LibraryStyles";
+import {bookService} from "../../services/book.service";
+import {BooksInAuthor} from "../../models/BooksInAuthor";
 
 
 const Iconpath = '../../../assets/icons/'
@@ -19,14 +21,12 @@ export const BooksbyAuthorScreen = ({navigation}) => {
         ]
     const trieValue = "aOrder";
 
-    const [authorBookDataSource, setauthorBookDataSource] = useState([])
+    const [authorBookDataSource, setauthorBookDataSource] = useState<BooksInAuthor[]>([])
     const [trie, setTrie] = useState(trieValue);
 
     const fetchData = () => {
-        fetch("http://" + ":4547/Runeskeeper/allBooksbyAuthor/1")
-            .then((response) => response.json())
-            .then((responseJson) => {
-                setauthorBookDataSource(responseJson)
+        bookService.recupererLivresDesAuteurs(1).then((booksInAuthors) => {
+                setauthorBookDataSource(booksInAuthors)
             })
             .catch((error) => {
                 console.error(error);
@@ -68,12 +68,12 @@ export const BooksbyAuthorScreen = ({navigation}) => {
                                     style={
                                         LibStyle.authorBlocTitleContainer
                                     }>
-                                    <Text style={LibStyle.titleTxt}> {item.Auteur}</Text>
+                                    <Text style={LibStyle.titleTxt}> {item.authorName}</Text>
                                 </View>
                             </View>
                             <View style={LibStyle.authorContainer}>
                                 <FlatList
-                                    data={item.data}
+                                    data={item.books}
                                     horizontal={true}
                                     refreshing={true}
                                     keyExtractor={(item, index) => index.toString()}
@@ -97,7 +97,7 @@ export const BooksbyAuthorScreen = ({navigation}) => {
                                                             uri: data.thumbnail,
                                                         }}
                                                     ><Text
-                                                        style={LibStyle.thumbnailCount}>+{Object.keys(item.data).length - 3}</Text>
+                                                        style={LibStyle.thumbnailCount}>+{Object.keys(item.books).length - 3}</Text>
                                                     </ImageBackground>
                                                 )
 
@@ -106,8 +106,8 @@ export const BooksbyAuthorScreen = ({navigation}) => {
                                                     <TouchableOpacity
                                                         onPress={() => {
                                                             navigation.navigate("Book", {
-                                                                name: data.title,
-                                                                dataBook: data
+                                                                title: data.subtitle,
+                                                                dataBook: data.isbn
 
                                                             })
                                                         }}
@@ -136,9 +136,9 @@ export const BooksbyAuthorScreen = ({navigation}) => {
                                     <TouchableOpacity
                                         onPress={() => {
                                             navigation.navigate("List", {
-                                                dataBooks: item.data,
-                                                name: item.sectionName,
-                                                nbBooks: Object.keys(item.data).length
+                                                dataBooks: item.books,
+                                                sectionName: item.authorName,
+                                                nbBooks: Object.keys(item.books).length
                                             })
                                         }}
                                     >

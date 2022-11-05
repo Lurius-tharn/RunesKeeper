@@ -1,16 +1,17 @@
 import {Animated, Modal, Pressable, StyleSheet, Text, View} from "react-native";
 import React, {useRef, useState} from 'react';
 import {PrimaryColor} from "../constants/Colors";
+import {BookService} from "../services/book.service";
 
 
 export const BooksByComponent: React.FunctionComponent<any> = ({sortBy, trie}) => {
+
     const translation = useRef(new Animated.Value(0)).current;
     const fadeAnim = useRef(new Animated.Value(0)).current;
     const translationy = useRef(new Animated.Value(0)).current;
     const [modalVisible, setModalVisible] = useState(false);
 
     const [push, setPush] = useState(0)
-
 
     const animation = (animatedStyle: any, animatedToValue: any) => {
         Animated.timing(animatedStyle, {

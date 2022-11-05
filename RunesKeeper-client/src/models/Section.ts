@@ -1,6 +1,5 @@
-export interface Genre {
-    user:number;
-    book:number;
-    section:number;
+export interface Section {
+    id_section: number;
+    section_name: string;
 
 }

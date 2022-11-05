@@ -20,7 +20,6 @@ export const BookScreen = ({route, navigation}) => {
     const [sectionDataSource, setsectionDataSource] = useState([])
 
     const fetchSectionsData = () => {
-
         fetch("http://" + ":4547/Runeskeeper/sectionsofBook/1/" + dataBook.Isbn)
             .then((response) => response.json())
             .then((responseJson) => {
@@ -30,6 +29,9 @@ export const BookScreen = ({route, navigation}) => {
                 console.error(error);
             });
     }
+
+
+
     useEffect(() => {
         const timer = setTimeout(() => {
             fetchSectionsData();

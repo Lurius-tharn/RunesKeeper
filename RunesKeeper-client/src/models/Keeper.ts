@@ -1,6 +1,9 @@
-export interface User {
-    id_user:number;
-    pseudonyme:string;
-    email:string;
-    password:number;
+import {User} from "./User";
+import {Book} from "./Books";
+import {Section} from "./Section";
+
+export interface Keeper {
+    user:User;
+    book:Book;
+    section:Section;
 }

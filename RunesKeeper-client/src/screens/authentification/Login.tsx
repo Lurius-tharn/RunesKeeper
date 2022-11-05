@@ -3,12 +3,16 @@ import {Alert, Pressable, Text, TextInput, View} from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AuthStyle from '../../styles/authentification/AuthStyles';
 import Checkbox from 'expo-checkbox';
+import {userService} from "../../services/user.service";
+
+
 
 export const Login = ({navigation}) => {
     const [pseudo, setPseudo] = useState('')
     const [password, setPassword] = useState('')
     const [isSelected, setSelection] = useState(false);
     let data = {"pseudo": pseudo, "pwd": password}
+
     const validate = (email, password) => {
         const pseudoRegex = /^[a-zA-Z]+$/
         return {
@@ -95,23 +99,11 @@ export const Login = ({navigation}) => {
 }
 
 const logIn = async (data, navigation, isLogged) => {
-    fetch("http://" + ":4547/Runeskeeper/signin", {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            "pseudo": data["pseudo"],
-            "password": data["pwd"]
-        })
-    }).then(response => {
-        return response.json()
-    })
-        .then(responseJSON => {
-            if (!responseJSON.valid) {
+    userService.recupererUtilisateurConnnection(data["pseudo"], data["pwd"])
+ .then(responseJSON => {
+        if (!responseJSON.valid) {
                 Alert.alert("ERREUR", responseJSON.message)
             } else {
-
                 if (isLogged) {
                     try {
                         const jsonValue = JSON.stringify(responseJSON)

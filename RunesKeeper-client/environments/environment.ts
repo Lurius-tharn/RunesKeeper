@@ -1,6 +1,6 @@
 export const environment = {
     production: false,
-    origin: +":4547/Runeskeeper/",
+    origin: "http://10.0.2.2:4547/",
     api: '/api/'
 };
 

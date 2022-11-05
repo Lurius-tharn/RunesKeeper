@@ -4,6 +4,7 @@ import {Book} from "../entity/Book";
 import {SynthesisBook} from "../entity/SynthesisBook";
 import {BooksByAuthors} from "../entity/BooksByAuthors";
 import {BooksInGenre} from "../entity/BooksInCategory";
+import {BookWithLikedSections} from "../entity/BookWithLikedSections";
 
 
 export const toBooksBySections = (keepers: Keeper[]): BooksInSection[] => {
@@ -66,4 +67,14 @@ export const toBookSynthesis = (book: Book): SynthesisBook => {
 		thumbnail: book.thumbnail
 
 	}
+}
+
+export const toBookWithLikedSections = (keepers:Keeper[]): BookWithLikedSections => {
+	const likedSections = []
+	keepers.forEach((keeper)=> likedSections.push(keeper.section))
+	return  {
+		book: keepers[0].book,
+		likedSections: likedSections
+	}
+
 }

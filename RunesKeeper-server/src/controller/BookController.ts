@@ -1,7 +1,12 @@
 import {NextFunction, Request, Response} from "express"
 import {BookRepository, LibraryRepository} from "../Repository/BookDatabaseRepository";
 import {Keeper} from "../entity/Keeper";
-import {toBooksByAuthors, toBooksByGenre, toBooksBySections} from "../Repository/BookDatabaseMapper";
+import {
+	toBooksByAuthors,
+	toBooksByGenre,
+	toBooksBySections,
+	toBookWithLikedSections
+} from "../Repository/BookDatabaseMapper";
 import {Book} from "../entity/Book";
 
 export class BookController {
@@ -35,18 +40,34 @@ export class BookController {
 
 	async bookByIsbn (request: Request, response: Response, next: NextFunction) {
 		const {isbn} = request.params
-		await BookRepository.getBookByIsbn (isbn).then ((book: Book) => {
+		await BookRepository.getBookByIsbn (parseInt (isbn)).then ((book: Book) => {
 			return response.send ((book))
+		})
+	}
+
+	async addedSectionsOfOneBook (request: Request, response: Response, next: NextFunction) {
+		const {userId,isbn} = request.params
+		await LibraryRepository.getAddedSectionsOfOneBook (parseInt (userId),parseInt(isbn)).then ((keepers: Keeper[]) => {
+			return response.send ((toBookWithLikedSections(keepers)))
 		})
 	}
 
 	async addBook (request: Request, response: Response, next: NextFunction) {
 		const book: Book = request.body;
-		await BookRepository.addBook (book).then (() => response.json ({
-			"valid": true,
-			"message": "Succès !"
-		})).catch ((reason) => {
-			response.send (reason.sqlMessage);
-		});
+		await BookRepository.getBookByIsbn(book.isbn).then((bookAlreadyExist) => {
+			if (!bookAlreadyExist){
+				 BookRepository.addBook (book).then (() => response.json ({
+					"valid": true,
+					"message": "Succès !"
+				})).catch ((reason) => {
+					response.send (reason.sqlMessage);
+				});
+			}else{
+				response.send ("");
+
+			}
+
+		})
+
 	}
 }

@@ -1,3 +1,5 @@
+import {Genre} from "./Genre";
+
 export interface Book {
     title:string;
     subtitle:string;
@@ -6,7 +8,7 @@ export interface Book {
     published_date:string;
     resume:string;
     author:string;
-    genre:string;
+    genre:Genre;
     thumbnail:string;
     Isbn:string;
 

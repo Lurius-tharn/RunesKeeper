@@ -33,12 +33,23 @@ export const LibraryRepository = AppDataSource.getRepository (Keeper).extend ({
 
 
 	},
+	async getAddedSectionsOfOneBook(userId:number, isbn:number){
+		return this.createQueryBuilder("keeper")
+			.innerJoinAndSelect ("keeper.book", "book")
+			.innerJoinAndSelect ("keeper.section", "section")
+			.where ("keeper.user = :userId", {userId})
+			.andWhere("book.isbn = :isbn", {isbn})
+			.getMany ()
+
+
+	}
+
 
 
 })
 
 export const BookRepository = AppDataSource.getRepository (Book).extend ({
-	async getBookByIsbn (isbn: string): Promise<Book> {
+	async getBookByIsbn (isbn: number): Promise<Book> {
 		return this.createQueryBuilder ("book")
 			.innerJoinAndSelect ("book.genre", "genre")
 			.where ("book.isbn = :isbn", {isbn})

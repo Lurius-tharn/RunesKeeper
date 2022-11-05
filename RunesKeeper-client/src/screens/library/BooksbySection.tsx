@@ -1,24 +1,21 @@
 import React, {useEffect, useState} from "react"
 import {FlatList, Image, ImageBackground, Pressable, StyleSheet, Text, TouchableOpacity, View} from "react-native"
-import {createStackNavigator} from '@react-navigation/stack'
 import LibStyle from "../../styles/main/LibraryStyles";
+import {bookService} from "../../services/book.service";
+import {BooksInSection} from "../../models/BooksInSection";
 
-const Stack = createStackNavigator()
 export const BooksbySectionScreen = ({navigation}) => {
 
-    const [dataSource, setDataSource] = useState([])
-    const [modalVisible, setModalVisible] = useState(false);
+    const [synthesisBooksBySections, setSynthesisBooksBySections]  = useState<BooksInSection[]> ()
 
     const fetchData = () => {
+        bookService.recupererLivresDesSections(1).then((booksInSections)=> {
+            console.log (booksInSections)
+            setSynthesisBooksBySections(booksInSections)
 
-        fetch("http://" + ":4547/Runeskeeper/allBooksbysection/1")
-            .then((response) => response.json())
-            .then((responseJson) => {
-                setDataSource(responseJson)
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+        }).catch((error) => {
+            console.error(error);
+        });
     }
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -28,14 +25,11 @@ export const BooksbySectionScreen = ({navigation}) => {
     }, []);
 
     return (
-        //Components
-
         <View style={LibStyle.container}>
 
             <View>
                 <FlatList
-                    data={dataSource}
-
+                    data={synthesisBooksBySections}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={({item}) => {
                         let color;
@@ -62,12 +56,12 @@ export const BooksbySectionScreen = ({navigation}) => {
                                 }>
                                 <Text style={LibStyle.titleTxt}> {item.sectionName}</Text>
                             </View>
-                            <FlatList data={item.data}
+                            <FlatList data={item.books}
                                       contentContainerStyle={LibStyle.booksContainer}
                                       horizontal={true}
                                       refreshing={true}
                                       keyExtractor={(item, index) => index.toString()}
-                                      renderItem={({item: data, index}) => {
+                                      renderItem={({item: books, index}) => {
                                           let isFull = false;
                                           if (!isFull) {
                                               if (index >= 4) {
@@ -84,10 +78,10 @@ export const BooksbySectionScreen = ({navigation}) => {
                                                               {{opacity: 0.5}}
                                                           resizeMode="cover"
                                                           source={{
-                                                              uri: data.thumbnail,
+                                                              uri: books.thumbnail,
                                                           }}
                                                       ><Text
-                                                          style={LibStyle.thumbnailCount}>+{Object.keys(item.data).length - 3}</Text>
+                                                          style={LibStyle.thumbnailCount}>+{Object.keys(item.books).length - 3}</Text>
                                                       </ImageBackground>
                                                   )
 
@@ -96,8 +90,8 @@ export const BooksbySectionScreen = ({navigation}) => {
                                                       <Pressable
                                                           onPress={() => {
                                                               navigation.navigate("Book", {
-                                                                  name: data.title,
-                                                                  dataBook: data
+                                                                  title: books.subtitle,
+                                                                  dataBook: books.isbn
 
                                                               })
                                                           }}
@@ -105,7 +99,7 @@ export const BooksbySectionScreen = ({navigation}) => {
                                                           <Image
                                                               style={LibStyle.thumbnail}
                                                               source={{
-                                                                  uri: data.thumbnail,
+                                                                  uri: books.thumbnail,
                                                               }}
                                                           />
                                                       </Pressable>
@@ -122,9 +116,9 @@ export const BooksbySectionScreen = ({navigation}) => {
                                 style={LibStyle.selectButton}
                                 onPress={() => {
                                     navigation.navigate("List", {
-                                        dataBooks: item.data,
-                                        name: item.sectionName,
-                                        nbBooks: Object.keys(item.data).length
+                                        dataBooks: item.books,
+                                        sectionName: item.sectionName,
+                                        nbBooks: Object.keys(item.books).length
                                     })
                                 }}
                             >
@@ -142,41 +136,7 @@ export const BooksbySectionScreen = ({navigation}) => {
             </View>
 
 
-            {/* <SectionList
-            
-                style= {LibStyle.blocContainer}
-                
-                sections = {dataSource}
-                keyExtractor={(item,index) => index.toString()}  
-                renderSectionHeader=
-                { 
-                    ({ section } ) => 
-                        ( 
-                            <View 
-                                style={
-                                    { ...LibStyle.containerTitle, backgroundColor:Colors.PrimaryTextColor}
-                                }>
-                                <Text style={LibStyle.titleTxt}>{section.sectionName}</Text>          
-                            </View>
-                        ) 
-                }
-                renderItem={({ item, index, section }) => (
-                        <FlatList
-                            data={item}
-                            horizontal={true}
-                            renderItem={({ item }) => <Text style={{color:Colors.BluedGreenColor}}>{item.Osbn}</Text>} 
-                            
-                        />
-                    ) 
 
-                    
-                }
-                             >
-                
-                <TouchableOpacity style= {LibStyle.selectButton}>
-                <Text style={LibStyle.textButton}> Voir la sélection</Text>
-            </TouchableOpacity>
-            </SectionList> */}
         </View>
     )
 }

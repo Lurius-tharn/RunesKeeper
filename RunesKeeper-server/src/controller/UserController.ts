@@ -12,6 +12,8 @@ class UserController {
 	}
 
 	async registerUser (request: Request, response: Response, next: NextFunction) {
+
+		response.header("Access-Control-Allow-Origin" )
 		const user: User = request.body
 		bcrypt.hash (user.password, this.saltRounds, (err, encrypted) => {
 			if (err)
@@ -30,19 +32,21 @@ class UserController {
 	}
 
 	async getUserByPseudonyme (request: Request, response: Response, next: NextFunction) {
+		response.header("Access-Control-Allow-Origin" )
+
 		const pseudonyme: string = request.params.pseudonyme;
 		const password: string = request.params.password;
 
 		UserRepository.getUser (pseudonyme).then ((user: User) => {
 			if (!user) {
-				response.json ({
+				return response.json ({
 					"valid": false,
 					"message": "pseudonyme incorrect!"
 				})
 			}
 			bcrypt.compare (password, user.password, (error, result) => {
 				if (result) {
-					response.json ({
+					return response.json ({
 						"valid": true,
 						"message": "Succès !",
 						"pseudo": pseudonyme,
@@ -50,7 +54,7 @@ class UserController {
 					})
 					//Access to the home page
 				} else {
-					response.json ({
+					return response.json ({
 						"valid": false,
 						"message": "mot de passe saisie incorrect !"
 					})

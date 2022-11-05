@@ -2,13 +2,12 @@ import React, {useState} from "react"
 import {FlatList, Image, Text, TouchableOpacity, View} from "react-native"
 import ListStyle from "../../styles/main/ListStyle";
 import {BooksByComponent} from "../../components/BooksByComponent";
+import {BookSynthesis} from "../../models/BookSynthesis";
 
 export const ListScreen = ({route, navigation}) => {
     const Iconpath = '../../assets/icons/'
     const sortBy =
-        [{
-            titre: 'Titre', taille: '32', couleur: '#FFFFFF', trierPar: "title"
-        }, {
+        [ {
             titre: 'Auteur', taille: '32', couleur: '#FFFFFF', trierPar: "author"
         }, {
             titre: 'Publisher', taille: '32', couleur: '#FFFFFF', trierPar: "publisher"
@@ -20,7 +19,7 @@ export const ListScreen = ({route, navigation}) => {
 
 
     const {dataBooks, nbBooks} = route.params;
-    const [Books, setBooks] = useState(dataBooks);
+    const [Books, setBooks] = useState<BookSynthesis[]>(dataBooks) ;
     const trieValue = "publisher";
     const [trie, setTrie] = useState(trieValue);
 
@@ -47,8 +46,8 @@ export const ListScreen = ({route, navigation}) => {
                         <TouchableOpacity
                             onPress={() => {
                                 navigation.navigate("Book", {
-                                    name: item.title,
-                                    dataBook: item
+                                    name: item.subtitle,
+                                    dataBook: item.isbn
                                 })
                             }}
                         >

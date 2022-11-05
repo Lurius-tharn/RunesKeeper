@@ -4,7 +4,7 @@ import * as swaggerUi from 'swagger-ui-express';
 import * as swaggerJSDoc from 'swagger-jsdoc';
 import {AppDataSource} from "./connection/data-source";
 import bodyParser = require("body-parser");
-
+import * as cors from "cors"
 const PORT = 4547;
 
 
@@ -50,6 +50,7 @@ class App {
 		AppDataSource.initialize ().then ()
 		this.routePrv.routes (this.app);
 		this.app.use ('/docs', swaggerUi.serve, swaggerUi.setup (this.swaggerSpec));
+		this.app.use(cors());
 
 		this.app.listen (PORT, () => {
 			console.info ('Express server listening on http://localhost:4547');

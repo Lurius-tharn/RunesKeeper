@@ -7,7 +7,7 @@ import AppLoading from "expo-app-loading";
 const fetchFonts = () => {
     return Font.loadAsync({
         LibreBaskerville: require('./assets/fonts/LibreBaskerville-Regular.ttf'),
-        Montserrat: require('./assets/fonts/Montserrat-Regular.ttf '),
+        Montserrat: require('./assets/fonts/Montserrat-Regular.ttf'),
 
     });
 };

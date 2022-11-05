@@ -13,6 +13,7 @@ class Routes {
     }
 
     public routes(app): void {
+
         app.route('/')
             .get((request: Request, response: Response) => {
                 response.status(200)
@@ -171,6 +172,43 @@ class Routes {
          *           description: Created
          *   */
         app.route("/books/book").post((request: Request, response: Response, next: NextFunction) => this.bookController.addBook(request, response, next))
+
+        /**
+         * @swagger
+         * /books/book/{isbn}/{userId}:
+         *   get:
+         *     summary: Récupère un livres avec ces sections ajoutés.
+         *     description: Récupère un livres avec ces sections ajoutés.
+         *     parameters:
+         *       - in: path
+         *         name: userId
+         *         required: true
+         *         description: l'identifiant de l'utilisateur liée au livre voulue
+         *         schema:
+         *           type: integer
+         *       - in: path
+         *         name: isbn
+         *         required: true
+         *         description: l'identifiant ddu livre.
+         *         schema:
+         *           type: integer
+         *     responses:
+         *       200:
+         *         description: La liste des livres par categories.
+         *         content:
+         *           application/json:
+         *             schema:
+         *               type: object
+         *               properties:
+         *                 data:
+         *                   type: array
+         *                   items:
+         *                     type: object
+         *                     $ref: '#/components/schemas/BooksInGenre'
+         */
+
+        app.route("/books/book/:isbn/:userId").get((request: Request, response: Response, next: NextFunction) => this.bookController.addedSectionsOfOneBook(request, response, next))
+
 
         /**
          * @swagger

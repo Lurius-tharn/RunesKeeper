@@ -12,7 +12,7 @@ import {SynthesisBook} from "./SynthesisBook";
  *           books:
  *              type: array
  *              items:
- *               $ref: '#/components/schemas/Book'
+ *               $ref: '#/components/schemas/synthesisBook'
  * */
 export class BooksInSection {
 	sectionName: string;

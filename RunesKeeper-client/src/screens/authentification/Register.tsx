@@ -1,6 +1,9 @@
 import React, {useState} from 'react';
 import {Alert, Pressable, Text, TextInput, View} from 'react-native'
 import AuthStyle from '../../styles/authentification/AuthStyles';
+import {User} from "../../models/User";
+import {userService} from "../../services/user.service";
+
 
 export const Register = ({navigation}) => {
 
@@ -88,7 +91,7 @@ export const Register = ({navigation}) => {
                 ]}
 
                 onPress={() => {
-                    signIn(data, navigation)
+                    signIn (data, navigation).then()
                 }}
             >
                 <Text style={AuthStyle.loginButtonText}>S'inscrirer</Text>
@@ -98,20 +101,13 @@ export const Register = ({navigation}) => {
     )
 }
 const signIn = async (data, navigation) => {
-    fetch("http://" + ":4547/Runeskeeper/signup", {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            "email": data["email"],
-            "pseudo": data["pseudo"],
-            "password": data["pwd"],
-            "repeatPassword": data["repeatPassword"]
-        })
-    }).then(response => {
-        return response.json()
-    })
+    const user:User = {
+        email: data["email"],
+        password: data["pwd"],
+        pseudonyme: data["pseudo"]
+    }
+
+    userService.enregistrerNouvelUtilisateur(user)
         .then(responseJSON => {
             if (!responseJSON.valid) {
                 Alert.alert("ERREUR", responseJSON.message)
