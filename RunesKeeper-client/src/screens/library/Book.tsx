@@ -3,6 +3,8 @@ import {Alert, Image, Text, TouchableOpacity, View} from "react-native"
 import bookStyle from "../../styles/main/BookStyles";
 import ListStyle from "../../styles/main/ListStyle";
 import * as Colors from "../../styles/colors";
+import {bookService} from "../../services/book.service";
+import {BookWithLikedSections} from "../../models/BookWithLikedSections";
 
 const Iconpath = '../../assets/icons/'
 /*
@@ -14,16 +16,16 @@ const Iconpath = '../../assets/icons/'
 *
 * */
 export const BookScreen = ({route, navigation}) => {
-    const {dataBook} = route.params;
+    const {isbn} = route.params.isbn;
     const authorApi = {}
     const Iconpath = '../../../assets/icons/'
-    const [sectionDataSource, setsectionDataSource] = useState([])
+    const [bookWithLikedSections, setbookWithLikedSections] = useState<BookWithLikedSections>()
 
     const fetchSectionsData = () => {
-        fetch("http://" + ":4547/Runeskeeper/sectionsofBook/1/" + dataBook.Isbn)
-            .then((response) => response.json())
-            .then((responseJson) => {
-                setsectionDataSource(responseJson)
+        bookService.recupererLivreParIsbn(1,isbn)
+            .then((book) => {
+                console.log (book)
+                 setbookWithLikedSections (book);
             })
             .catch((error) => {
                 console.error(error);
@@ -63,7 +65,7 @@ export const BookScreen = ({route, navigation}) => {
                 break;
         }
 
-        sectionDataSource.forEach((element) => {
+        bookWithLikedSections.likedSections.forEach((element) => {
             if (element.section_name === section)
                 returnedColor = sectionColor;
         })
@@ -77,7 +79,7 @@ export const BookScreen = ({route, navigation}) => {
             <View style={bookStyle.BannerContainer}>
                 <Image
                     source={{
-                        uri: dataBook.thumbnail,
+                        uri: bookWithLikedSections.book.thumbnail,
                     }}
                     style={{
                         height: 96.41,
@@ -87,20 +89,20 @@ export const BookScreen = ({route, navigation}) => {
                     }}
                 />
                 <View>
-                    <Text style={bookStyle.titleText}>{dataBook.title}</Text>
-                    <Text style={bookStyle.subTitleText}>{dataBook.subtitle}</Text>
+                    <Text style={bookStyle.titleText}>{bookWithLikedSections.book.title}</Text>
+                    <Text style={bookStyle.subTitleText}>{bookWithLikedSections.book.subtitle}</Text>
                     <Text
-                        style={bookStyle.publishText}>{dataBook.publisher}, {dataBook.nb_pages}, {dataBook.published_date}</Text>
+                        style={bookStyle.publishText}>{bookWithLikedSections.book.publisher}, {bookWithLikedSections.book.nb_pages}, {bookWithLikedSections.book.published_date}</Text>
 
                 </View>
             </View>
             <View style={bookStyle.authGenreContainer}>
                 <View style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
                     <Image style={{height: 22, width: 22}} source={require(Iconpath + "author.png")}/>
-                    <Text style={bookStyle.authText}>{dataBook.author}</Text>
+                    <Text style={bookStyle.authText}>{bookWithLikedSections.book.author}</Text>
                 </View>
 
-                <Text style={bookStyle.genreText}>{dataBook.genreName}</Text>
+                <Text style={bookStyle.genreText}>{bookWithLikedSections.book.genre.name}</Text>
             </View>
             <View style={bookStyle.AddSectionsContainer}>
                 <View style={bookStyle.OneSectionContainer}>
@@ -136,7 +138,7 @@ export const BookScreen = ({route, navigation}) => {
                             borderColor: Colors.IreadColor, ...bookStyle.sectionsIconContainer
                         }}
                         onPress={() => {
-                            addBookOnSection(1, dataBook.id_book, 4);
+                            addBookOnSection(1, bookWithLikedSections.book.isbn, 4);
                         }}
                     >
                         <Image style={{height: 35, width: 35, zIndex: 444}} source={require(Iconpath + "iRead.png")}/>
@@ -186,7 +188,7 @@ export const BookScreen = ({route, navigation}) => {
                 </View>
 
                 <View style={bookStyle.resumeContainer}>
-                    <Text> {dataBook.resume}</Text>
+                    <Text> {bookWithLikedSections.book.resume}</Text>
                 </View>
             </View>
 

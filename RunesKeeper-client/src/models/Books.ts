@@ -10,6 +10,6 @@ export interface Book {
     author:string;
     genre:Genre;
     thumbnail:string;
-    Isbn:string;
+    isbn:string;
 
 }

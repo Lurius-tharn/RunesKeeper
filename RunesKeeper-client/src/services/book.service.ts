@@ -1,8 +1,8 @@
 import { ApiService } from "./api.service";
-import {Book} from "../models/Books";
 import {BooksInSection} from "../models/BooksInSection";
 import {BooksInAuthor} from "../models/BooksInAuthor";
 import {Keeper} from "../models/Keeper";
+import {BookWithLikedSections} from "../models/BookWithLikedSections";
 
 export class BookService {
     BASE_URL = 'books';
@@ -24,6 +24,9 @@ export class BookService {
         return  this.api.get(this.BASE_URL + `/book/${isbn}/${userId}`)
     }
 
+    recupererLivreParIsbn(userId:number, isbn: string): Promise<BookWithLikedSections>{
+        return  this.api.get(this.BASE_URL + `/books/book/${isbn}/${userId}`)
+    }
     enregistrerLivre(book:Keeper) : Promise<any> {
         // Plusieurs regles de gestion: si le livre existe déja en base, on l'ajoute pas, juste la section avec le keeper
         return this.api.post(this.BASE_URL+'/book',book);

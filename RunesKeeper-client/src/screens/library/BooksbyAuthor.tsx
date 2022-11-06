@@ -27,6 +27,7 @@ export const BooksbyAuthorScreen = ({navigation}) => {
     const fetchData = () => {
         bookService.recupererLivresDesAuteurs(1).then((booksInAuthors) => {
                 setauthorBookDataSource(booksInAuthors)
+            console.log (booksInAuthors)
             })
             .catch((error) => {
                 console.error(error);

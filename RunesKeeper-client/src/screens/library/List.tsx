@@ -18,11 +18,13 @@ export const ListScreen = ({route, navigation}) => {
         ]
 
 
-    const {dataBooks, nbBooks} = route.params;
+    const {dataBooks, nbBooks} = route.params ;
     const [Books, setBooks] = useState<BookSynthesis[]>(dataBooks) ;
     const trieValue = "publisher";
     const [trie, setTrie] = useState(trieValue);
+    const fetchData = () => {
 
+    }
 
     return (
         <View style={ListStyle.listContainer}>
@@ -46,7 +48,7 @@ export const ListScreen = ({route, navigation}) => {
                         <TouchableOpacity
                             onPress={() => {
                                 navigation.navigate("Book", {
-                                    name: item.subtitle,
+                                    title: item.subtitle,
                                     dataBook: item.isbn
                                 })
                             }}
