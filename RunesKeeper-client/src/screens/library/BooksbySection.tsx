@@ -6,11 +6,10 @@ import {BooksInSection} from "../../models/BooksInSection";
 
 export const BooksbySectionScreen = ({navigation}) => {
 
-    const [synthesisBooksBySections, setSynthesisBooksBySections]  = useState<BooksInSection[]> ()
+    const [synthesisBooksBySections, setSynthesisBooksBySections] = useState<BooksInSection[]>()
 
     const fetchData = () => {
-        bookService.recupererLivresDesSections(1).then((booksInSections)=> {
-            console.log (booksInSections)
+        bookService.recupererLivresDesSections(1).then((booksInSections) => {
             setSynthesisBooksBySections(booksInSections)
 
         }).catch((error) => {
@@ -91,7 +90,7 @@ export const BooksbySectionScreen = ({navigation}) => {
                                                           onPress={() => {
                                                               navigation.navigate("Book", {
                                                                   title: books.subtitle,
-                                                                  dataBook: books.isbn
+                                                                  isbn: books.isbn
 
                                                               })
                                                           }}
@@ -134,7 +133,6 @@ export const BooksbySectionScreen = ({navigation}) => {
 
                 />
             </View>
-
 
 
         </View>
