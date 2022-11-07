@@ -5,4 +5,4 @@ build/
 tmp/
 temp/
 
-src/connection/
+RunesKeeper-server/src/connection/data-source.ts
