@@ -26,8 +26,7 @@ export const BooksbyAuthorScreen = ({navigation}) => {
 
     const fetchData = () => {
         bookService.recupererLivresDesAuteurs(1).then((booksInAuthors) => {
-                setauthorBookDataSource(booksInAuthors)
-            console.log (booksInAuthors)
+            setauthorBookDataSource(booksInAuthors)
             })
             .catch((error) => {
                 console.error(error);
@@ -53,8 +52,8 @@ export const BooksbyAuthorScreen = ({navigation}) => {
                     </View>
                 </View>}
                 data={authorBookDataSource.sort((a, b) => trie == "aOrder" ?
-                    a["Auteur"].localeCompare(b["Auteur"]) :
-                    b["Auteur"].localeCompare(a["Auteur"])
+                    a["authorName"].localeCompare(b["authorName"]) :
+                    b["authorName"].localeCompare(a["authorName"])
                 )}
                 extraData={authorBookDataSource}
                 style={{height: 100 + "%"}}

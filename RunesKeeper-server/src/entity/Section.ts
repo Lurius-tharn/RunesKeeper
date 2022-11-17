@@ -24,6 +24,8 @@ export class Section {
 
 	@Column ()
 	section_name: string;
+	@Column ()
+	section_color: string;
 }
 
 

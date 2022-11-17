@@ -1,6 +1,11 @@
 import React, {useEffect, useState} from "react";
-import {Alert, Text, View} from "react-native"
+import {Alert, Text, TouchableOpacity,Image, View} from "react-native"
 import * as Colors from "../../styles/colors";
+import {BookWithLikedSections} from "../../models/BookWithLikedSections";
+import {bookService} from "../../services/book.service";
+import bookStyle from "../../styles/main/BookStyles";
+import ListStyle from "../../styles/main/ListStyle";
+import {useFocusEffect} from "@react-navigation/native";
 
 const Iconpath = '../../assets/icons/'
 /*
@@ -11,37 +16,37 @@ const Iconpath = '../../assets/icons/'
 * Retirer d'une section
 *
 * */
-export const BookScreen = ({route, navigation}) => {
+export const BookScreen = ({route}) => {
     const {isbn} = route.params;
     const authorApi = {}
     const Iconpath = '../../../assets/icons/'
-    const [bookWithLikedSections, set] = useState<any>()
+    const [bookWithLikedSections, setbookWithLikedSections] = useState<any>()
 
-    const fetchSectionsData = () => {
+    const fetchSectionsData = async () => {
         console.log(isbn)
 
-        set(111);
-
-        console.log(bookWithLikedSections)
-        // bookService.recupererLivreParIsbn(1, isbn)
-        //     .then((book) => {
-        //         console.log(book)
-        //         setbookWithLikedSections(book);
-        //     })
-        //     .catch((error) => {
-        //         console.error(error);
-        //     });
+       await bookService.recupererLivreParIsbn(1, isbn)
+            .then((book) => {
+                const bookWith = book
+                setbookWithLikedSections(bookWith);
+            })
+            .catch((error) => {
+                console.error("bvdcj" +error);
+            });
     }
 
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            fetchSectionsData();
-        }, 3000);
-        return () => clearTimeout(timer);
-    }, []);
+    useFocusEffect(
+        React.useCallback(() => {
+            const timer = setTimeout(() => {
+                fetchSectionsData ().then ();
+            });
+            return () => clearTimeout(timer);
+        }, [])
+    );
 
     function getColorFromDatabase(number) {
+        console.log ("feegfg")
         let section;
         let sectionColor;
         let returnedColor = "transparent";
@@ -76,129 +81,124 @@ export const BookScreen = ({route, navigation}) => {
 
     return (
 
-        <View>
+        <View style={bookStyle.BookContainer}>
+            <View style={bookStyle.BannerContainer}>
+                <Image
+                    source={{
+                        uri: bookWithLikedSections.book.thumbnail,
+                    }}
+                    style={{
+                        height: 96.41,
+                        width: 59.78,
+                        marginRight: 5
 
-            <Text>{}</Text>
+                    }}
+                />
+                <View>
+                    <Text style={bookStyle.titleText}>{bookWithLikedSections.book.title}</Text>
+                    <Text style={bookStyle.subTitleText}>{bookWithLikedSections.book.subtitle}</Text>
+                    <Text
+                        style={bookStyle.publishText}>{bookWithLikedSections.book.publisher}, {bookWithLikedSections.book.nb_pages}, {bookWithLikedSections.book.published_date}</Text>
+
+                </View>
+            </View>
+            <View style={bookStyle.authGenreContainer}>
+                <View style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
+                    <Image style={{height: 22, width: 22}} source={require(Iconpath + "author.png")}/>
+                    <Text style={bookStyle.authText}>{bookWithLikedSections.book.author}</Text>
+                </View>
+
+                <Text style={bookStyle.genreText}>{bookWithLikedSections.book.genre.name}</Text>
+            </View>
+            <View style={bookStyle.AddSectionsContainer}>
+                <View style={bookStyle.OneSectionContainer}>
+                    <TouchableOpacity
+                        style={{
+                            backgroundColor: getColorFromDatabase(2),
+                            borderColor: Colors.PrimaryTextColor, ...bookStyle.sectionsIconContainer
+                        }}>
+                        <Image style={{height: 35, width: 35, opacity: 1}} source={require(Iconpath + "iLove.png")}/>
+                    </TouchableOpacity>
+                    <Text style={{
+                        ...bookStyle.sectionsText, color: Colors.PrimaryTextColor,
+                    }}>Coup de coeur</Text>
+                </View>
+
+
+                <View style={{...bookStyle.OneSectionContainer, marginBottom: 10}}>
+                    <TouchableOpacity style={{
+                        backgroundColor: getColorFromDatabase(3),
+                        borderColor: Colors.IhaveColor, ...bookStyle.sectionsIconContainer
+                    }}>
+                        <Image style={{height: 35, width: 35, zIndex: 99999}} source={require(Iconpath + "IHave.png")}/>
+                    </TouchableOpacity>
+                    <Text style={{
+                        ...bookStyle.sectionsText, color: Colors.IhaveColor,
+                    }}>J'ai</Text>
+                </View>
+
+                <View style={{...bookStyle.OneSectionContainer, marginBottom: 10}}>
+                    <TouchableOpacity
+                        style={{
+                            backgroundColor: getColorFromDatabase(4),
+                            borderColor: Colors.IreadColor, ...bookStyle.sectionsIconContainer
+                        }}
+                        onPress={() => {
+                            addBookOnSection(1, bookWithLikedSections.book.isbn, 4);
+                        }}
+                    >
+                        <Image style={{height: 35, width: 35, zIndex: 444}} source={require(Iconpath + "iRead.png")}/>
+                    </TouchableOpacity>
+                    <Text style={{
+                        ...bookStyle.sectionsText, color: Colors.IreadColor,
+                    }}>J'ai lu</Text>
+                </View>
+                <View style={{...bookStyle.OneSectionContainer, marginBottom: 10}}>
+                    <TouchableOpacity style={{
+
+                        borderColor: Colors.IwantColor,
+                        backgroundColor: getColorFromDatabase(5), ...bookStyle.sectionsIconContainer
+                    }}>
+                        <Image style={{height: 35, width: 35, zIndex: 9999, position: "relative"}}
+                               source={require(Iconpath + "iWant.png")}/>
+                    </TouchableOpacity>
+                    <Text style={{
+                        ...bookStyle.sectionsText, color: Colors.IwantColor,
+                    }}>Je veux</Text>
+                </View>
+
+
+            </View>
+            <View style={bookStyle.contentContainer}>
+                <View>
+                    <View style={ListStyle.bookNumberContainer}>
+                        <Text style={ListStyle.numberText}>Du même auteur</Text>
+                    </View>
+                    {/* <FlatList
+                        data={ApiBooks}
+                    /> */}
+                    <View>
+
+                    </View>
+                </View>
+
+                <View
+                    style={{
+                        display: "flex",
+                        flexDirection: "row-reverse"
+                    }}
+                >
+                    <View style={{...ListStyle.bookNumberContainer}}>
+                        <Text style={ListStyle.numberText}>Résumé</Text>
+                    </View>
+                </View>
+
+                <View style={bookStyle.resumeContainer}>
+                    <Text> {bookWithLikedSections.book.resume}</Text>
+                </View>
+            </View>
 
         </View>
-        // <View style={bookStyle.BookContainer}>
-        //     <View style={bookStyle.BannerContainer}>
-        //         <Image
-        //             source={{
-        //                 uri: bookWithLikedSections.book.thumbnail,
-        //             }}
-        //             style={{
-        //                 height: 96.41,
-        //                 width: 59.78,
-        //                 marginRight: 5
-        //
-        //             }}
-        //         />
-        //         <View>
-        //             <Text style={bookStyle.titleText}>{bookWithLikedSections.book.title}</Text>
-        //             <Text style={bookStyle.subTitleText}>{bookWithLikedSections.book.subtitle}</Text>
-        //             <Text
-        //                 style={bookStyle.publishText}>{bookWithLikedSections.book.publisher}, {bookWithLikedSections.book.nb_pages}, {bookWithLikedSections.book.published_date}</Text>
-        //
-        //         </View>
-        //     </View>
-        //     <View style={bookStyle.authGenreContainer}>
-        //         <View style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
-        //             <Image style={{height: 22, width: 22}} source={require(Iconpath + "author.png")}/>
-        //             <Text style={bookStyle.authText}>{bookWithLikedSections.book.author}</Text>
-        //         </View>
-        //
-        //         <Text style={bookStyle.genreText}>{bookWithLikedSections.book.genre.name}</Text>
-        //     </View>
-        //     <View style={bookStyle.AddSectionsContainer}>
-        //         <View style={bookStyle.OneSectionContainer}>
-        //             <TouchableOpacity
-        //                 style={{
-        //                     backgroundColor: getColorFromDatabase(2),
-        //                     borderColor: Colors.PrimaryTextColor, ...bookStyle.sectionsIconContainer
-        //                 }}>
-        //                 <Image style={{height: 35, width: 35, opacity: 1}} source={require(Iconpath + "iLove.png")}/>
-        //             </TouchableOpacity>
-        //             <Text style={{
-        //                 ...bookStyle.sectionsText, color: Colors.PrimaryTextColor,
-        //             }}>Coup de coeur</Text>
-        //         </View>
-        //
-        //
-        //         <View style={{...bookStyle.OneSectionContainer, marginBottom: 10}}>
-        //             <TouchableOpacity style={{
-        //                 backgroundColor: getColorFromDatabase(3),
-        //                 borderColor: Colors.IhaveColor, ...bookStyle.sectionsIconContainer
-        //             }}>
-        //                 <Image style={{height: 35, width: 35, zIndex: 99999}} source={require(Iconpath + "IHave.png")}/>
-        //             </TouchableOpacity>
-        //             <Text style={{
-        //                 ...bookStyle.sectionsText, color: Colors.IhaveColor,
-        //             }}>J'ai</Text>
-        //         </View>
-        //
-        //         <View style={{...bookStyle.OneSectionContainer, marginBottom: 10}}>
-        //             <TouchableOpacity
-        //                 style={{
-        //                     backgroundColor: getColorFromDatabase(4),
-        //                     borderColor: Colors.IreadColor, ...bookStyle.sectionsIconContainer
-        //                 }}
-        //                 onPress={() => {
-        //                     addBookOnSection(1, bookWithLikedSections.book.isbn, 4);
-        //                 }}
-        //             >
-        //                 <Image style={{height: 35, width: 35, zIndex: 444}} source={require(Iconpath + "iRead.png")}/>
-        //             </TouchableOpacity>
-        //             <Text style={{
-        //                 ...bookStyle.sectionsText, color: Colors.IreadColor,
-        //             }}>J'ai lu</Text>
-        //         </View>
-        //         <View style={{...bookStyle.OneSectionContainer, marginBottom: 10}}>
-        //             <TouchableOpacity style={{
-        //
-        //                 borderColor: Colors.IwantColor,
-        //                 backgroundColor: getColorFromDatabase(5), ...bookStyle.sectionsIconContainer
-        //             }}>
-        //                 <Image style={{height: 35, width: 35, zIndex: 9999, position: "relative"}}
-        //                        source={require(Iconpath + "iWant.png")}/>
-        //             </TouchableOpacity>
-        //             <Text style={{
-        //                 ...bookStyle.sectionsText, color: Colors.IwantColor,
-        //             }}>Je veux</Text>
-        //         </View>
-        //
-        //
-        //     </View>
-        //     <View style={bookStyle.contentContainer}>
-        //         <View>
-        //             <View style={ListStyle.bookNumberContainer}>
-        //                 <Text style={ListStyle.numberText}>Du même auteur</Text>
-        //             </View>
-        //             {/* <FlatList
-        //                 data={ApiBooks}
-        //             /> */}
-        //             <View>
-        //
-        //             </View>
-        //         </View>
-        //
-        //         <View
-        //             style={{
-        //                 display: "flex",
-        //                 flexDirection: "row-reverse"
-        //             }}
-        //         >
-        //             <View style={{...ListStyle.bookNumberContainer}}>
-        //                 <Text style={ListStyle.numberText}>Résumé</Text>
-        //             </View>
-        //         </View>
-        //
-        //         <View style={bookStyle.resumeContainer}>
-        //             <Text> {bookWithLikedSections.book.resume}</Text>
-        //         </View>
-        //     </View>
-        //
-        // </View>
     )
 }
 

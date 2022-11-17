@@ -1,4 +1,5 @@
 import {SynthesisBook} from "./SynthesisBook";
+import {Section} from "./Section";
 
 /**
  * @swagger
@@ -7,14 +8,14 @@ import {SynthesisBook} from "./SynthesisBook";
  *     BooksInSection:
  *       type: object
  *       properties:
- *           sectionName:
- *              type: string
+ *           section:
+ *              $ref: '#/components/schemas/Section'
  *           books:
  *              type: array
  *              items:
  *               $ref: '#/components/schemas/synthesisBook'
  * */
 export class BooksInSection {
-	sectionName: string;
+	section: Section;
 	books: SynthesisBook[];
 }

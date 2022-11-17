@@ -32,7 +32,7 @@ export const BooksbySectionScreen = ({navigation}) => {
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={({item}) => {
                         let color;
-                        switch (item.sectionName) {
+                        switch (item.section.section_name) {
                             case "Coup de cœur":
                                 color = '#BF8F00'
                                 break;
@@ -51,9 +51,9 @@ export const BooksbySectionScreen = ({navigation}) => {
                         return <View style={LibStyle.blocContainer}>
                             <View
                                 style={
-                                    {...LibStyle.containerTitle, backgroundColor: color}
+                                    {...LibStyle.containerTitle, backgroundColor: item.section.section_color}
                                 }>
-                                <Text style={LibStyle.titleTxt}> {item.sectionName}</Text>
+                                <Text style={LibStyle.titleTxt}> {item.section.section_name}</Text>
                             </View>
                             <FlatList data={item.books}
                                       contentContainerStyle={LibStyle.booksContainer}
@@ -116,7 +116,7 @@ export const BooksbySectionScreen = ({navigation}) => {
                                 onPress={() => {
                                     navigation.navigate("List", {
                                         dataBooks: item.books,
-                                        sectionName: item.sectionName,
+                                        sectionName: item.section.section_name,
                                         nbBooks: Object.keys(item.books).length
                                     })
                                 }}

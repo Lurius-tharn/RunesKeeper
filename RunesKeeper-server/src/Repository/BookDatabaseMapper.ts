@@ -5,14 +5,14 @@ import {SynthesisBook} from "../entity/SynthesisBook";
 import {BooksByAuthors} from "../entity/BooksByAuthors";
 import {BooksInGenre} from "../entity/BooksInCategory";
 import {BookWithLikedSections} from "../entity/BookWithLikedSections";
-
+import {isEqual} from "lodash"
 
 export const toBooksBySections = (keepers: Keeper[]): BooksInSection[] => {
 	let booksInSections: BooksInSection;
 	const result = keepers.reduce (function (sections, item) {
-		booksInSections = sections.find (section => section.sectionName === item.section.section_name);
+		booksInSections = sections.find (section => isEqual(section.section, item.section));
 		if (!booksInSections) {
-			booksInSections = {sectionName: item.section.section_name, books: []};
+			booksInSections = {section: item.section, books: []};
 			sections.push (booksInSections);
 		}
 		booksInSections.books.push (toBookSynthesis (item.book));

@@ -14,7 +14,7 @@ export class BookService {
     }
 
     recupererLivresDesAuteurs(userId:number) : Promise<Partial<BooksInAuthor[]>> {
-        return this.api.get(this.BASE_URL+'/allBooksbyAuthor',userId);
+        return this.api.get(this.BASE_URL+`/allBooksbyAuthor/${userId}`,);
     }
     recupererLivresDesGenres(isbn:string) : Promise<Partial<any>> {
         return this.api.get(this.BASE_URL+'/book',isbn);
@@ -24,8 +24,9 @@ export class BookService {
         return  this.api.get(this.BASE_URL + `/book/${isbn}/${userId}`)
     }
 
-    recupererLivreParIsbn(userId:number, isbn: string): Promise<BookWithLikedSections>{
-        return  this.api.get(this.BASE_URL + `/books/book/${isbn}/${userId}`)
+    recupererLivreParIsbn(userId:number, isbn: string): Promise<Partial<BookWithLikedSections>>{
+        console.log ("BHHHHHHHHHHHHH"+isbn )
+        return  this.api.get(this.BASE_URL + `/book/${isbn}/${userId}`)
     }
     enregistrerLivre(book:Keeper) : Promise<any> {
         // Plusieurs regles de gestion: si le livre existe déja en base, on l'ajoute pas, juste la section avec le keeper

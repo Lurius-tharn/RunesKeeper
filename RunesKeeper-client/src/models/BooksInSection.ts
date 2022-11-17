@@ -1,6 +1,7 @@
 import {BookSynthesis} from "./BookSynthesis";
+import {Section} from "./Section";
 
 export interface BooksInSection {
-    sectionName:string;
+    section:Section;
     books: BookSynthesis[]
 }

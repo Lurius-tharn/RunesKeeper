@@ -2,7 +2,7 @@ import * as Font from 'expo-font';
 import React, {useState} from 'react';
 import Index from './src/index';
 import AppLoading from "expo-app-loading";
-
+<script src="http://localhost:8097"></script>
 
 const fetchFonts = () => {
     return Font.loadAsync({

@@ -45,6 +45,13 @@ class App {
 		this.app = express ();// support application/json type post data
 		this.app.use (bodyParser.json ());//support application/x-www-form-urlencoded post data
 		this.app.use (bodyParser.urlencoded ({extended: false}));// for routing the http request to controller
+		this.app.use(function (req, res, next) {
+
+			res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+			res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+			res.setHeader('Access-Control-Allow-Credentials', "true");
+			next();
+		});
 		this.routePrv = new Routes ();
 		this.swaggerSpec = swaggerJSDoc (this.options)
 		AppDataSource.initialize ().then ()

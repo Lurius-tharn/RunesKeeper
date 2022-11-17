@@ -4,11 +4,13 @@ import { environment } from '../../environments/environment';
 export class ApiService {
 
     public get(url: string, params: any = null): Promise<any> {
+        console.log (params)
         if (params !== null) {
           Object.keys(params).forEach((key) => params[key] == null && delete params[key]);
         }
         return Promise.resolve()
           .then(() => axios.get(environment.origin + url, {  params:params })).then((response)=> {
+                console.log (response.data)
                 return response.data
             })
             .catch((error) => Promise.reject(error));
