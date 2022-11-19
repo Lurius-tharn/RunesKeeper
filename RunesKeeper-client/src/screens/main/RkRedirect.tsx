@@ -14,8 +14,6 @@ const RunesKeeperRedirect = ({navigation}) => {
 
     const setNavigation = async () => {
         try {
-            console.log("feef")
-
             const responseJSON = await AsyncStorage.getItem('@ma_clé')
             console.log(responseJSON != null ? JSON.parse(responseJSON) : null
             )

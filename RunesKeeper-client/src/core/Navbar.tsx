@@ -58,30 +58,33 @@ export const Navbar: React.FunctionComponent<any> = ({route, navigation}) => {
 
         );
     }
+
+    function getTabBarLabel (routeName: string) {
+        return ({focused, color}) => {
+            return (
+                <Text
+                    style={{
+                        fontSize: 12,
+                        fontWeight: '200',
+                        fontFamily: 'Montserrat',
+                        opacity: focused ? 100 : 70,
+                        height: focused ? 10 : 0
+                    }}>
+                    {focused ? routeName.toUpperCase () : false}
+                </Text>
+
+            )
+        };
+    }
+
     return (
         <NavBarTab.Navigator
             screenOptions={{
-                tabBarActiveTintColor: Colors.WhiteColor,
+                tabBarActiveTintColor: Colors.PrimaryTextColor,
                 tabBarInactiveTintColor: Colors.WhiteColor,
                 tabBarStyle: [{display: "flex"}],
             }}
-            defaultScreenOptions={({route}) => ({
-                tabBarLabel: ({focused}) => {
-                    return (
-                        <Text
-                            style={{
-                                fontSize: 12,
-                                fontWeight: '200',
-                                fontFamily: 'Montserrat',
-                                opacity: focused ? 100 : 70,
-                                height: focused ? 10 : 0
-                            }}>
-                            {focused ? route.name.toUpperCase() : false}
-                        </Text>
 
-                    )
-                },
-            })}
 
         >
             <NavBarTab.Group screenOptions={{
@@ -113,7 +116,8 @@ export const Navbar: React.FunctionComponent<any> = ({route, navigation}) => {
                     name="Bibliothèque"
                     children={() => <LibraryScreen navigation={navigation}/>}
                     options={{
-                        tabBarIcon: ({color, size}) => (
+                        tabBarLabel:getTabBarLabel ('Bibliothèque'),
+                        tabBarIcon: ({color, size,focused}) => (
                             <Image style={{height: 40, width: 40}} source={require(Iconpath + "book.png")}/>)
                     }}
                 />
@@ -123,6 +127,8 @@ export const Navbar: React.FunctionComponent<any> = ({route, navigation}) => {
                     children={() => <HomeScreen/>}
 
                     options={{
+                        tabBarLabel:getTabBarLabel ("Accueil"),
+
                         tabBarIcon: ({color, size}) => (
                             <Image style={{height: 40, width: 40}} source={require(Iconpath + "home.png")}/>)
                     }}
@@ -132,6 +138,8 @@ export const Navbar: React.FunctionComponent<any> = ({route, navigation}) => {
                     name="Rechercher"
                     children={() => <SearchScreen/>}
                     options={{
+                        tabBarLabel:getTabBarLabel ("Rechercher"),
+
                         tabBarIcon: ({color, size}) => (
                             <Image style={{height: 40, width: 40}} source={require(Iconpath + "search.png")}/>),
 
@@ -149,4 +157,3 @@ export const Navbar: React.FunctionComponent<any> = ({route, navigation}) => {
 
 
 export default Navbar;
- 

@@ -24,8 +24,7 @@ export class BookService {
         return  this.api.get(this.BASE_URL + `/book/${isbn}/${userId}`)
     }
 
-    recupererLivreParIsbn(userId:number, isbn: string): Promise<Partial<BookWithLikedSections>>{
-        console.log ("BHHHHHHHHHHHHH"+isbn )
+    recupererLivreParIsbn(userId:number, isbn: string): Promise<BookWithLikedSections>{
         return  this.api.get(this.BASE_URL + `/book/${isbn}/${userId}`)
     }
     enregistrerLivre(book:Keeper) : Promise<any> {

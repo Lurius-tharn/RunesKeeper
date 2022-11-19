@@ -5,7 +5,7 @@ import {BookWithLikedSections} from "../../models/BookWithLikedSections";
 import {bookService} from "../../services/book.service";
 import bookStyle from "../../styles/main/BookStyles";
 import ListStyle from "../../styles/main/ListStyle";
-import {useFocusEffect} from "@react-navigation/native";
+import {useFocusEffect, useIsFocused} from "@react-navigation/native";
 
 const Iconpath = '../../assets/icons/'
 /*
@@ -20,7 +20,19 @@ export const BookScreen = ({route}) => {
     const {isbn} = route.params;
     const authorApi = {}
     const Iconpath = '../../../assets/icons/'
-    const [bookWithLikedSections, setbookWithLikedSections] = useState<any>()
+    const [bookWithLikedSections, setbookWithLikedSections] = useState<BookWithLikedSections>()
+
+    const isFocused = useIsFocused();
+
+    useEffect(() => {
+        console.log("called");
+
+        // Call only when screen open or when back on screen
+        if(isFocused){
+            fetchSectionsData();
+        }
+    }, [ isFocused]);
+
 
     const fetchSectionsData = async () => {
         console.log(isbn)
@@ -79,7 +91,7 @@ export const BookScreen = ({route}) => {
 
     }
 
-    return (
+    return bookWithLikedSections ?(
 
         <View style={bookStyle.BookContainer}>
             <View style={bookStyle.BannerContainer}>
@@ -199,7 +211,8 @@ export const BookScreen = ({route}) => {
             </View>
 
         </View>
-    )
+    ) : (<View>
+    </View>)
 }
 
 const updateStatus = async (status, idUser, idBook, idSection) => {
