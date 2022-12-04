@@ -1,6 +1,7 @@
 import { ApiService } from "./api.service";
 
 import {User} from "../models/User";
+import {Section} from "../models/Section";
 
  class UserService {
     BASE_URL = 'users';
@@ -14,6 +15,10 @@ import {User} from "../models/User";
     recupererUtilisateurConnnection(pseudonyme:string, password: string) : Promise<Partial<any>> {
         return this.api.get(this.BASE_URL+`/getUser/${pseudonyme}/${password}`);
     }
+
+     recupererSectionsUtilisateur(userId:number) : Promise<Partial<Section[]>> {
+         return this.api.get(this.BASE_URL+`/${userId}/sections`);
+     }
 
 
 }

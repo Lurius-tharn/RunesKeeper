@@ -5,9 +5,11 @@ import {
 	toBooksByAuthors,
 	toBooksByGenre,
 	toBooksBySections,
-	toBookWithLikedSections
+	toBookWithLikedSections, toLikedSections
 } from "../Repository/BookDatabaseMapper";
 import {Book} from "../entity/Book";
+import {SECTION_NAME} from "../constants/Sections.constants";
+import {Section} from "../entity/Section";
 
 export class BookController {
 
@@ -70,4 +72,55 @@ export class BookController {
 		})
 
 	}
+
+	async  modifierSectionPourLivre(request: Request, response: Response, next: NextFunction) {
+		// a refaire.
+		const keeper:Keeper = request.body;
+		await LibraryRepository.getAddedSectionsOfOneBook(keeper.user, keeper.book.isbn).then((sectionsDansLivre)=> {
+			sectionsDansLivre.forEach((keep)=> {
+				if (keep.section.section_name === keeper.section.section_name) {
+					LibraryRepository.deleteKeeper(keep).then()
+				}
+				else if (keeper.section.section_name == SECTION_NAME.IWant){
+					if (keep.section.section_name == SECTION_NAME.IRead || keep.section.section_name ==  SECTION_NAME.iHave ){
+						LibraryRepository.deleteKeeper(keep).then( () =>  LibraryRepository.addKeeper(keeper).then())
+					} else {
+						LibraryRepository.addKeeper(keeper).then()
+
+					}
+				} else if(keeper.section.section_name == SECTION_NAME.iHave || keeper.section.section_name == SECTION_NAME.IRead) {
+
+				}
+				else {
+					LibraryRepository.addKeeper(keeper).then()
+				}
+			})
+			if (!sectionsDansLivre.length){
+				LibraryRepository.addKeeper(keeper).then()
+			}
+		})
+		LibraryRepository.getAddedSectionsOfOneBook (keeper.user, keeper.book.isbn).then ((sectionsDansLivre) => {
+			response.send(toLikedSections (sectionsDansLivre))
+		});
+
+	}
+
+	/***
+	 *  Je donne : Une section
+	 *  	Je recupere
+	 *  	je veux ajouter, ou supprimer un keeper
+	 *  	plus précisémment :
+	 *  		-	ajouter un keeper s'il n'existe pas
+						-	cas spécifiques :
+							- J'ajoute une section j'aime :
+									-
+									-
+							-J'ajoute une section J'ai, ou j'ai lu
+	 *  		-	supprimer un keeper s'il existe
+
+	 *
+	 *
+	 */
+
+
 }

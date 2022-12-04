@@ -116,7 +116,6 @@ export const Navbar: React.FunctionComponent<any> = ({route, navigation}) => {
                     name="Bibliothèque"
                     children={() => <LibraryScreen navigation={navigation}/>}
                     options={{
-                        tabBarLabel:getTabBarLabel ('Bibliothèque'),
                         tabBarIcon: ({color, size,focused}) => (
                             <Image style={{height: 40, width: 40}} source={require(Iconpath + "book.png")}/>)
                     }}
@@ -127,7 +126,6 @@ export const Navbar: React.FunctionComponent<any> = ({route, navigation}) => {
                     children={() => <HomeScreen/>}
 
                     options={{
-                        tabBarLabel:getTabBarLabel ("Accueil"),
 
                         tabBarIcon: ({color, size}) => (
                             <Image style={{height: 40, width: 40}} source={require(Iconpath + "home.png")}/>)
@@ -138,7 +136,6 @@ export const Navbar: React.FunctionComponent<any> = ({route, navigation}) => {
                     name="Rechercher"
                     children={() => <SearchScreen/>}
                     options={{
-                        tabBarLabel:getTabBarLabel ("Rechercher"),
 
                         tabBarIcon: ({color, size}) => (
                             <Image style={{height: 40, width: 40}} source={require(Iconpath + "search.png")}/>),

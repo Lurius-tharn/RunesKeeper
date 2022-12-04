@@ -1,4 +1,5 @@
-import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, JoinColumn, OneToOne, PrimaryColumn, PrimaryGeneratedColumn} from "typeorm";
+import {User} from "./User";
 
 /**
  * @swagger
@@ -21,11 +22,20 @@ import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
 export class Section {
 	@PrimaryGeneratedColumn ()
 	id_section: number;
-
 	@Column ()
 	section_name: string;
 	@Column ()
 	section_color: string;
+
+	@OneToOne (type => User, user => user.id_user)
+	@JoinColumn ({name: "user", referencedColumnName: "id_user"})
+	user: User;
+
+	@Column ()
+	addedDate:Date
+
+	@Column ()
+	section_icon: string
 }
 
 

@@ -6,6 +6,7 @@ import {BooksByAuthors} from "../entity/BooksByAuthors";
 import {BooksInGenre} from "../entity/BooksInCategory";
 import {BookWithLikedSections} from "../entity/BookWithLikedSections";
 import {isEqual} from "lodash"
+import {Section} from "../entity/Section";
 
 export const toBooksBySections = (keepers: Keeper[]): BooksInSection[] => {
 	let booksInSections: BooksInSection;
@@ -77,4 +78,14 @@ export const toBookWithLikedSections = (keepers:Keeper[]): BookWithLikedSections
 		likedSections: likedSections
 	}
 
+
+
+
+}
+
+
+export const toLikedSections = (keepers:Keeper[]): Section[] => {
+	const likedSections = []
+	keepers.forEach ((keeper) => likedSections.push (keeper.section))
+	return likedSections;
 }

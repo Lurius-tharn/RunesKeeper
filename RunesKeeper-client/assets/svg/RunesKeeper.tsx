@@ -2,6 +2,7 @@ import * as React from 'react';
 import {G, Path, Rect, Svg} from 'react-native-svg';
 
 export default function RunesKeeper({height, width}) {
+    // @ts-ignore
     return (
 
         <Svg height={height} viewBox="0 0 48 58" width={width}>

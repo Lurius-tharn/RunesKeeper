@@ -2,6 +2,7 @@ import {Column, Entity, JoinColumn, OneToOne, PrimaryColumn} from "typeorm";
 import {User} from "./User";
 import {Book} from "./Book";
 import {Section} from "./Section";
+import exp from "constants";
 
 /**
  * @swagger
@@ -26,7 +27,7 @@ export class Keeper {
 	@OneToOne (type => User, user => user.id_user)
 	@PrimaryColumn ()
 	@JoinColumn ({name: "user", referencedColumnName: "id_user"})
-	user: User;
+	user: number;
 
 	@OneToOne ((type) => Book, (book) => book.id_book)
 	@JoinColumn ({name: "book", referencedColumnName: "id_book"})
@@ -42,5 +43,6 @@ export class Keeper {
 	keep_date: string;
 
 }
+
 
 

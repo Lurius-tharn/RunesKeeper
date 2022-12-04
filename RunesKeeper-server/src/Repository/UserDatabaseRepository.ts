@@ -1,5 +1,6 @@
 import {AppDataSource} from "../connection/data-source";
 import {User} from "../entity/User";
+import {Section} from "../entity/Section";
 
 
 export const UserRepository = AppDataSource.getRepository (User).extend ({
@@ -16,5 +17,18 @@ export const UserRepository = AppDataSource.getRepository (User).extend ({
 			.execute ()
 
 	},
+
 })
+
+export const SectionRepository = AppDataSource.getRepository(Section).extend({
+	async getSectionsOfUser(userId: number): Promise<Section[]> {
+		return this.createQueryBuilder("section")
+			.where("section.user = :userId", {userId})
+			.orWhere("section.user IS NULL")
+			.orderBy("section.id_section")
+			.getMany()
+
+	},
+})
+
 

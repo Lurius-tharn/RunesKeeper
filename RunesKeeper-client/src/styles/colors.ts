@@ -15,3 +15,5 @@ export const IreadColor = "#A7CC5C"
 export const IwantColor = "#E67C73";
 
 export const PrimaryTextColor = "#BF8F00"
+
+export  const  LoveColor = "#BF8F00"

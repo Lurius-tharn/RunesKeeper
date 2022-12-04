@@ -1,13 +1,20 @@
 import React, {useEffect, useState} from "react";
-import {Alert, Text, TouchableOpacity,Image, View} from "react-native"
+import {Alert, Text, TouchableOpacity, Image, View, FlatList} from "react-native"
 import * as Colors from "../../styles/colors";
 import {BookWithLikedSections} from "../../models/BookWithLikedSections";
 import {bookService} from "../../services/book.service";
 import bookStyle from "../../styles/main/BookStyles";
 import ListStyle from "../../styles/main/ListStyle";
 import {useFocusEffect, useIsFocused} from "@react-navigation/native";
+import {userService} from "../../services/user.service";
+import {Section} from "../../models/Section";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-const Iconpath = '../../assets/icons/'
+import { MaterialIcons } from '@expo/vector-icons';
+import {Book} from "../../models/Books";
+import {User} from "../../models/User";
+
+type MaterialIconName = React.ComponentProps<typeof MaterialIcons>['name'];
 /*
 * Trois appels au back:
 * Vérifier dans quel section est le livre pour l'identifier
@@ -21,29 +28,28 @@ export const BookScreen = ({route}) => {
     const authorApi = {}
     const Iconpath = '../../../assets/icons/'
     const [bookWithLikedSections, setbookWithLikedSections] = useState<BookWithLikedSections>()
+    const [secionsOfUser, setSecionsOfUser] = useState<Section[]>()
 
     const isFocused = useIsFocused();
-
-    useEffect(() => {
-        console.log("called");
-
-        // Call only when screen open or when back on screen
-        if(isFocused){
-            fetchSectionsData();
-        }
-    }, [ isFocused]);
-
-
+    type Props = {
+        materialIconName: keyof typeof MaterialIcons.glyphMap;
+    }
     const fetchSectionsData = async () => {
-        console.log(isbn)
 
+        await userService.recupererSectionsUtilisateur(1).then((sections) => {
+            setSecionsOfUser(sections)
+        })
        await bookService.recupererLivreParIsbn(1, isbn)
-            .then((book) => {
-                const bookWith = book
-                setbookWithLikedSections(bookWith);
+            .then((bookWithLikedSections) => {
+                if (!bookWithLikedSections){
+                    // Recherche API
+                    // enregistre le livre
+                }
+                setbookWithLikedSections(bookWithLikedSections);
+                rafraichirSectionsLikes(bookWithLikedSections.likedSections)
             })
             .catch((error) => {
-                console.error("bvdcj" +error);
+                console.error(error);
             });
     }
 
@@ -57,42 +63,29 @@ export const BookScreen = ({route}) => {
         }, [])
     );
 
-    function getColorFromDatabase(number) {
-        console.log ("feegfg")
-        let section;
-        let sectionColor;
-        let returnedColor = "transparent";
-
-        switch (number) {
-            case 2:
-                section = "Coup de cœur";
-                sectionColor = Colors.PrimaryTextColor;
-                break;
-            case 3:
-                section = "J'ai";
-                sectionColor = Colors.IhaveColor;
-                break;
-            case 4:
-                section = "J'ai lu";
-                sectionColor = Colors.IreadColor;
-                break;
-            case 5:
-                section = "Je veux";
-                sectionColor = Colors.IwantColor;
-                break;
-        }
-
-        bookWithLikedSections.likedSections.forEach((element) => {
-            if (element.section_name === section)
-                returnedColor = sectionColor;
+    const afficherSectionsAjoutees = (section:Section) => {
+               setSecionsOfUser((secionsOfUser)=> {
+                   let secOfUser = secionsOfUser.find((seco) => seco.section_name == section.section_name)
+                   secOfUser.addedSection = !secOfUser.addedSection
+                   secOfUser.section_icon = secOfUser.addedSection?secOfUser.section_icon.split("-outline")[0]:secOfUser.section_icon + '-outline'
+                   return [...secionsOfUser]
+               })
+    }
+    // appeler ca dans un put
+    const rafraichirSectionsLikes = (sections: Section[]) => {
+        sections.forEach((liked)=> {
+            secionsOfUser.find((seco) => seco.section_name == liked.section_name).addedSection = true
+            afficherSectionsAjoutees(liked)
         })
-        return returnedColor;
+    }
 
-
+    const mettreAJourSections = (utilisateur: number, livre:Book,section:Section) => {
+        bookService.modifierSectionPourLivre({id_user:1,password:0,email:"",pseudonyme:""}, livre, section).then((sections) =>{
+            rafraichirSectionsLikes(sections)
+        })
     }
 
     return bookWithLikedSections ?(
-
         <View style={bookStyle.BookContainer}>
             <View style={bookStyle.BannerContainer}>
                 <Image
@@ -116,71 +109,41 @@ export const BookScreen = ({route}) => {
             </View>
             <View style={bookStyle.authGenreContainer}>
                 <View style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
-                    <Image style={{height: 22, width: 22}} source={require(Iconpath + "author.png")}/>
+                    <MaterialCommunityIcons name="typewriter" size={22} color={Colors.IwantColor} />
                     <Text style={bookStyle.authText}>{bookWithLikedSections.book.author}</Text>
                 </View>
 
                 <Text style={bookStyle.genreText}>{bookWithLikedSections.book.genre.name}</Text>
             </View>
-            <View style={bookStyle.AddSectionsContainer}>
-                <View style={bookStyle.OneSectionContainer}>
-                    <TouchableOpacity
-                        style={{
-                            backgroundColor: getColorFromDatabase(2),
-                            borderColor: Colors.PrimaryTextColor, ...bookStyle.sectionsIconContainer
-                        }}>
-                        <Image style={{height: 35, width: 35, opacity: 1}} source={require(Iconpath + "iLove.png")}/>
-                    </TouchableOpacity>
-                    <Text style={{
-                        ...bookStyle.sectionsText, color: Colors.PrimaryTextColor,
-                    }}>Coup de coeur</Text>
-                </View>
+                <FlatList
+                    data={secionsOfUser}
+                    renderItem={({item: section, index}) =>
+                        {
+                            return (
+                                <View style={{...bookStyle.OneSectionContainer}}>
+                                    <TouchableOpacity onPress={() => {
+                                        mettreAJourSections(1, bookWithLikedSections.book,section)
+                                    }} style={{
+                                        borderColor: section.section_color, ...bookStyle.sectionsIconContainer
+                                    }}  >
+                                        <MaterialCommunityIcons name={section.section_icon} size={35} color={section.section_color} />
+                                    </TouchableOpacity>
+                                    <Text style={{
+                                        ...bookStyle.sectionsText, color: section.section_color,
+                                    }}>{section.section_name}</Text>
+                                </View>
+                        )
 
-
-                <View style={{...bookStyle.OneSectionContainer, marginBottom: 10}}>
-                    <TouchableOpacity style={{
-                        backgroundColor: getColorFromDatabase(3),
-                        borderColor: Colors.IhaveColor, ...bookStyle.sectionsIconContainer
-                    }}>
-                        <Image style={{height: 35, width: 35, zIndex: 99999}} source={require(Iconpath + "IHave.png")}/>
-                    </TouchableOpacity>
-                    <Text style={{
-                        ...bookStyle.sectionsText, color: Colors.IhaveColor,
-                    }}>J'ai</Text>
-                </View>
-
-                <View style={{...bookStyle.OneSectionContainer, marginBottom: 10}}>
-                    <TouchableOpacity
-                        style={{
-                            backgroundColor: getColorFromDatabase(4),
-                            borderColor: Colors.IreadColor, ...bookStyle.sectionsIconContainer
                         }}
-                        onPress={() => {
-                            addBookOnSection(1, bookWithLikedSections.book.isbn, 4);
-                        }}
-                    >
-                        <Image style={{height: 35, width: 35, zIndex: 444}} source={require(Iconpath + "iRead.png")}/>
-                    </TouchableOpacity>
-                    <Text style={{
-                        ...bookStyle.sectionsText, color: Colors.IreadColor,
-                    }}>J'ai lu</Text>
-                </View>
-                <View style={{...bookStyle.OneSectionContainer, marginBottom: 10}}>
-                    <TouchableOpacity style={{
-
-                        borderColor: Colors.IwantColor,
-                        backgroundColor: getColorFromDatabase(5), ...bookStyle.sectionsIconContainer
-                    }}>
-                        <Image style={{height: 35, width: 35, zIndex: 9999, position: "relative"}}
-                               source={require(Iconpath + "iWant.png")}/>
-                    </TouchableOpacity>
-                    <Text style={{
-                        ...bookStyle.sectionsText, color: Colors.IwantColor,
-                    }}>Je veux</Text>
-                </View>
+                    contentContainerStyle={bookStyle.AddSectionsContainer}
+                    extraData={secionsOfUser}
+                    refreshing={true}
+                    keyExtractor={(item, index) => index.toString()}
+                >
 
 
-            </View>
+                </FlatList>
+
             <View style={bookStyle.contentContainer}>
                 <View>
                     <View style={ListStyle.bookNumberContainer}>
@@ -211,68 +174,6 @@ export const BookScreen = ({route}) => {
             </View>
 
         </View>
-    ) : (<View>
-    </View>)
+    ) : null
 }
-
-const updateStatus = async (status, idUser, idBook, idSection) => {
-    if (status == 0) {
-        addBookOnSection(idUser, idBook, idSection)
-
-    }
-}
-
-const deleteBookOnSection = async (idUser, idBook, idSection) => {
-    // Verifier dans un premier temps l'état du bouton (OnKeep, OffKeep)
-    // en fonction de ca, supprimer ou ajouter la section et
-    fetch("http://" + ":4547/Runeskeeper/deleteKeeper", {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            "idUser": idUser,
-            "idBook": idBook,
-            "idSection": idSection,
-
-        })
-    }).then(response => {
-        return response.json()
-    })
-        .then(responseJSON => {
-            if (!responseJSON.valid) {
-                Alert.alert("ERREUR", responseJSON.message)
-            } else {
-                Alert.alert("VALID", responseJSON.message)
-            }
-        }).catch(error => console.log(error))
-}
-
-const addBookOnSection = async (idUser, idBook, idSection) => {
-
-    // Verifier dans un premier temps l'état du bouton (OnKeep, OffKeep)
-    // en fonction de ca, supprimer ou ajouter la section et
-    fetch("http://" + ":4547/Runeskeeper/newKeeper", {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            "idUser": idUser,
-            "idBook": idBook,
-            "idSection": idSection,
-
-        })
-    }).then(response => {
-        return response.json()
-    })
-        .then(responseJSON => {
-            if (!responseJSON.valid) {
-                Alert.alert("ERREUR", responseJSON.message)
-            } else {
-                Alert.alert("VALID", responseJSON.message)
-            }
-        }).catch(error => console.log(error))
-}
-
 

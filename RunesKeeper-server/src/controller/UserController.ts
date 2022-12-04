@@ -1,7 +1,11 @@
 import {NextFunction, Request, Response} from "express"
 import {User} from "../entity/User";
-import {UserRepository} from "../Repository/UserDatabaseRepository";
+import {SectionRepository, UserRepository} from "../Repository/UserDatabaseRepository";
 import * as bcrypt from 'bcrypt';
+import {LibraryRepository} from "../Repository/BookDatabaseRepository";
+import {Keeper} from "../entity/Keeper";
+import {toBooksBySections} from "../Repository/BookDatabaseMapper";
+import {Section} from "../entity/Section";
 
 class UserController {
 	private saltRounds: number;
@@ -12,7 +16,6 @@ class UserController {
 	}
 
 	async registerUser (request: Request, response: Response, next: NextFunction) {
-
 		response.header("Access-Control-Allow-Origin" )
 		const user: User = request.body
 		bcrypt.hash (user.password, this.saltRounds, (err, encrypted) => {
@@ -63,6 +66,15 @@ class UserController {
 		})
 
 	}
+	 async getSectionsOfUser (request: Request, response: Response, next: NextFunction) {
+		 const {userId} = request.params
+		 await SectionRepository.getSectionsOfUser (parseInt (userId))
+			 .then ((sections: Section[]) => {
+				 return response.send ( (sections))
+			 })
+
+	 }
+
 }
 
 export {UserController};

@@ -175,6 +175,28 @@ class Routes {
 
         /**
          * @swagger
+         * /books/keeper:
+         *     put:
+         *       summary: Modifier une section pour un livre et un utilisateur.
+         *       requestBody:
+         *         description: Modifier une section pour un livre et un utilisateur.
+         *         required: true
+         *         content:
+         *           application/json:
+         *             schema:
+         *               $ref: '#/components/schemas/Keeper'
+         *           text/plain:
+         *             schema:
+         *               type: string
+         *       responses:
+         *         '201':
+         *           description: Created
+         *   */
+        app.route("/books/keeper").put((request: Request, response: Response, next: NextFunction) => this.bookController.modifierSectionPourLivre(request, response, next))
+
+
+        /**
+         * @swagger
          * /books/book/{isbn}/{userId}:
          *   get:
          *     summary: Récupère un livres avec ces sections ajoutés.
@@ -263,6 +285,34 @@ class Routes {
          *                   $ref: '#/components/schemas/User'
          */
         app.route("/users/getUser/:pseudonyme/:password").get((request: Request, response: Response, next: NextFunction) => this.userController.getUserByPseudonyme(request, response, next))
+
+
+        /**
+         * @swagger
+         * /users/{userId}/sections:
+         *   get:
+         *     summary: Récupère la liste des sections ajoutées par l'utilisateur.
+         *     description: Récupère la liste des sections ajoutées par l'utilisateur.
+         *     parameters:
+         *       - in: path
+         *         name: userId
+         *         required: true
+         *         description: l'id de l'utilisateur.
+         *         schema:
+         *           type: string
+         *     responses:
+         *       200:
+         *         description: L'utilisateur.
+         *         content:
+         *           application/json:
+         *             schema:
+         *               type: object
+         *               properties:
+         *                 Utilisateur:
+         *                   type: object
+         *                   $ref: '#/components/schemas/User'
+         */
+        app.route("/users/:userId/sections").get((request: Request, response: Response, next: NextFunction) => this.userController.getSectionsOfUser(request, response, next))
 
 
     }

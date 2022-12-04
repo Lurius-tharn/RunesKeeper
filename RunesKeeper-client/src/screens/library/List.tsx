@@ -22,9 +22,6 @@ export const ListScreen = ({route, navigation}) => {
     const [Books, setBooks] = useState<BookSynthesis[]>(dataBooks) ;
     const trieValue = "publisher";
     const [trie, setTrie] = useState(trieValue);
-    const fetchData = () => {
-
-    }
 
     return (
         <View style={ListStyle.listContainer}>
@@ -49,7 +46,7 @@ export const ListScreen = ({route, navigation}) => {
                             onPress={() => {
                                 navigation.navigate("Book", {
                                     title: item.subtitle,
-                                    dataBook: item.isbn
+                                    isbn: item.isbn
                                 })
                             }}
                         >

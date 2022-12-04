@@ -1,6 +1,7 @@
 import {AppDataSource} from "../connection/data-source";
 import {Keeper} from "../entity/Keeper";
 import {Book} from "../entity/Book";
+import {Section} from "../entity/Section";
 
 
 export const LibraryRepository = AppDataSource.getRepository(Keeper).extend({
@@ -33,7 +34,7 @@ export const LibraryRepository = AppDataSource.getRepository(Keeper).extend({
 
 
     },
-    async getAddedSectionsOfOneBook(userId: number, isbn: number) {
+    async getAddedSectionsOfOneBook(userId: number, isbn: number) : Promise<Keeper[]>{
         return this.createQueryBuilder("keeper")
             .innerJoinAndSelect("keeper.book", "book")
             .innerJoinAndSelect("keeper.section", "section")
@@ -42,6 +43,37 @@ export const LibraryRepository = AppDataSource.getRepository(Keeper).extend({
             .andWhere("book.isbn = :isbn", {isbn})
             .getMany()
 
+
+    },
+    async deleteKeeper(keeper:Keeper){
+        return this.createQueryBuilder('keeper')
+            .delete()
+            .from(Keeper)
+            .where("user = :user", { user: keeper.user })
+            .andWhere("section = :section", { section: keeper.section.id_section })
+            .andWhere("book = :book", { book: keeper.book.id_book })
+            .execute()
+
+    },
+
+
+    async addKeeper(keeper:Keeper){
+        const keep:Keeper = await  this.getKeeper(keeper)
+        if (!keep){
+            return this.createQueryBuilder().insert()
+                .into(Keeper)
+                .values(keeper)
+                .execute()
+        }
+        return Promise.resolve("")
+
+    },
+
+    async getKeeper(keeper:Keeper){
+        return this.createQueryBuilder('keeper')
+            .where("user = :user", { user: keeper.user })
+            .andWhere("section = :section", { section: keeper.section.id_section })
+            .andWhere("book = :book", { book: keeper.book.id_book }).getOne()
 
     }
 
@@ -56,7 +88,6 @@ export const BookRepository = AppDataSource.getRepository(Book).extend({
             .getOne()
 
     },
-
     addBook(book: Book) {
         return this.createQueryBuilder()
             .insert()
@@ -66,3 +97,4 @@ export const BookRepository = AppDataSource.getRepository(Book).extend({
     }
 
 })
+
